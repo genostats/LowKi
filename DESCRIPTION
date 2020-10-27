@@ -1,0 +1,17 @@
+Package: LoKi
+Type: Package
+Title: Low Depth Kinship
+Version: 0.1
+Date: 2020-10-26
+Encoding: UTF-8 
+Authors@R: c( person("Anthony", "Herzig", role = "aut"),
+              person("Hervé", "Perdry", role = c("cre", "aut"), email = "herve.perdry@u-psud.fr") )
+Description: Computes Kinship Matrices (GRM and Dominance Matrix) from Low Depth Sequencing Data.
+License: GPL-3
+LinkingTo: Rcpp, RcppParallel, RcppEigen
+Depends: gaston, plyr, dplyr, Rcpp, RcppParallel, methods
+Imports:
+NeedsCompilation: yes
+LazyLoad: yes
+LazyData: yes
+RoxygenNote: 7.1.1
