@@ -7,8 +7,8 @@
 using namespace Rcpp;
 
 // lowKincpp
-NumericMatrix lowKincpp(NumericMatrix P1, NumericMatrix P2, bool adjust, bool domi);
-RcppExport SEXP _LoKi_lowKincpp(SEXP P1SEXP, SEXP P2SEXP, SEXP adjustSEXP, SEXP domiSEXP) {
+NumericMatrix lowKincpp(NumericMatrix P1, NumericMatrix P2, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LoKi_lowKincpp(SEXP P1SEXP, SEXP P2SEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -16,7 +16,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type P2(P2SEXP);
     Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
     Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
-    rcpp_result_gen = Rcpp::wrap(lowKincpp(P1, P2, adjust, domi));
+    Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
+    rcpp_result_gen = Rcpp::wrap(lowKincpp(P1, P2, adjust, domi, constr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -33,7 +34,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 4},
+    {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
     {NULL, NULL, 0}
 };

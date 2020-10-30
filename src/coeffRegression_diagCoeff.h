@@ -43,6 +43,12 @@ public:
     coeffs = XtX.colPivHouseholderQr().solve(XtY);
 //    Rcpp::Rcout << coeffs << "\n"; 
   }
+
+  scalar_t getIntercept() {
+    VECTOR2<scalar_t> coeffs;
+    regress(coeffs);
+    return coeffs[0];
+  }
 };
 
 #endif 

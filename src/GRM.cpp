@@ -2,6 +2,7 @@
 #include <RcppEigen.h>
 #include <Rcpp.h>
 #include "coeffRegression.h"
+#include "coeffRegressionBis.h"
 #include "coeff.h"
 #include "KinMatrix.h"
 using namespace Rcpp;
@@ -28,12 +29,18 @@ inline void fillKin(NumericMatrix P1, NumericMatrix P2, KinMatrix<scalar_t, C> &
 // calcule la GRM et tous les coefficients de régression, en considant les colonnes de P1 et P2 une à une (SNP par SNP)
 // (ce sont les matrices de probas des genotypes 1 et 2)
 // [[Rcpp::export]]
-NumericMatrix lowKincpp(NumericMatrix P1, NumericMatrix P2, bool adjust, bool domi) {
+NumericMatrix lowKincpp(NumericMatrix P1, NumericMatrix P2, bool adjust, bool domi, bool constr) {
   int n = P1.nrow();
   if(adjust) {
-    KinMatrix<float, coeffRegression> K(n);
-    fillKin(P1, P2, K, domi);
-    return K.getInterceptMatrix();
+    if(constr) {
+      KinMatrix<float, coeffRegressionBis> K(n);
+      fillKin(P1, P2, K, domi);
+      return K.getInterceptMatrix();
+    } else {
+      KinMatrix<float, coeffRegression> K(n);
+      fillKin(P1, P2, K, domi);
+      return K.getInterceptMatrix();
+    }
   } else {
     KinMatrix<float, coeff> K(n);
     fillKin(P1, P2, K, domi);

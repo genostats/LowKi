@@ -109,18 +109,18 @@ Rcpp::NumericMatrix KinMatrix<scalar_t, COEFF>::getRawMatrix() {
 // renvoie la matrice symétrique des intercepts
 template <typename scalar_t, class COEFF>
 Rcpp::NumericMatrix KinMatrix<scalar_t, COEFF>::getInterceptMatrix() {
-  VECTOR2<scalar_t> C2;
-  VECTOR4<scalar_t> C4;
+  // VECTOR2<scalar_t> C2;
+  // VECTOR4<scalar_t> C4;
   Rcpp::NumericMatrix R = Rcpp::no_init_matrix(size, size);
   int k = 0;
-  /* diagonale[0].regress(C2);
-  R(0,0) = C2(0);*/
   for(int i = 0; i < size; i++) {
-    diagonale[i].regress(C2);
-    R(i,i) = C2(0);
+    // diagonale[i].regress(C2);
+    // R(i,i) = C2(0);
+    R(i,i) = diagonale[i].getIntercept();
     for(int j = i+1; j < size; j++) {
-      offDiagonale[k++].regress(C4);
-      R(j,i) = C4(0);
+      // offDiagonale[k++].regress(C4);
+      // R(j,i) = C4(0);
+      R(j,i) = offDiagonale[k++].getIntercept();
     }
   }
   // symétriser

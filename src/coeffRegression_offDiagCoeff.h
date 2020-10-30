@@ -57,6 +57,13 @@ public:
     
     coeffs = XtX.colPivHouseholderQr().solve(XtY);
   }
+
+  scalar_t getIntercept() {
+    VECTOR4<scalar_t> coeffs;
+    regress(coeffs);
+    return coeffs[0];
+  }
+  
 };
 
 #endif
