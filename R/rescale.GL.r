@@ -1,7 +1,11 @@
-rescale.GL <- function(Glmat, method, userFun) {
+rescale.GL <- function(Glmat, method = "none" , userFun) {
   ## Create NxM matricies for the three genotype likelihoods, rescaled from an
   ## anticipated phred likelihood calculation from GATK.
-  if(method == "phred"){
+  if (method=="none") {
+    gL1AA <- t(Glmat[[1]])
+    gL1Aa <- t(Glmat[[2]]) 
+    gL1aa <- t(Glmat[[3]]) 
+  } else if(method == "phred"){
     ## Assuming its a VCF with phred likelihoods -  PL = -10*log10(X) - K for
     ## some constant K which we can ignore as on the log scale and we will
     ## re-weight later.
