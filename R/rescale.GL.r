@@ -5,6 +5,7 @@ rescale.GL <- function(Glmat, method, userFun) {
     ## Assuming its a VCF with phred likelihoods -  PL = -10*log10(X) - K for
     ## some constant K which we can ignore as on the log scale and we will
     ## re-weight later.
+    ## change
     f <- function(x) 10^(-0.1*as.numeric(as.character(x)))
     gL1AA <- t(mutate_all(Glmat[[1]], f))
     gL1Aa <- t(mutate_all(Glmat[[2]], f)) 
