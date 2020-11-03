@@ -6,7 +6,7 @@
 \usage{
 lowKin(
   Glmat,
-  method = c("imputation", "phred"),
+  method = c("none","imputation", "phred"),
   adjust = TRUE,
   dominance = FALSE,
   constraint = FALSE
