@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-lowKin <- function(Glmat, method = c("imputation", "phred"), adjust = TRUE, dominance = FALSE, constraint = FALSE) {
+lowKin <- function(Glmat, method = c("none","imputation", "phred"), adjust = TRUE, dominance = FALSE, constraint = FALSE) {
   method <- match.arg(method)
   R <- rescale.GL(Glmat, method)
   gL1Aa <- R[[2]]
