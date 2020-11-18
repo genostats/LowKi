@@ -14,11 +14,7 @@ Adjust <- function(set_s, X, gl.Aa, gl.aa) {
     ## depending on whether we are interrogating a diagonal or off-diagonal
     ## pair, run one of two linear regression models and keep the intercept
     ## estimate.
-    if(i !=j ){
-      interc <- lm(phi ~ v1*v2)$coefficients[1]
-    } else {
-      interc <- lm(phi ~ v1*v2)$coefficients[1]
-    }
+    interc <- lm(phi ~ v1*v2)$coefficients[1]
     f_t <- rbind(f_t, c(interc, mean(phi, na.rm=TRUE)))
   }
   
