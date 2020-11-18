@@ -24,7 +24,7 @@ Adjust <- function(set_s, X, gl.Aa, gl.aa) {
   B1 <- lm(f_t[-w,1] ~ f_t[-w,2])$coefficients[1:2]
   if( abs(B1[1]) > 0.005 ){ f_t[,1] <- f_t[,1] - B1[1] }
   beta1 <- B1[2]
-  beta2 <- mean(1/f_t[w,3])
+  beta2 <- mean(1/f_t[w,1])
   ## Combining this information gives a reasonable beta
   beta <- beta1*beta2
   list(beta = beta1*beta2, beta1 = beta1)
