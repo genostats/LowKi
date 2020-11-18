@@ -17,7 +17,7 @@ Adjust <- function(set_s, X, gl.Aa, gl.aa) {
     if(i !=j ){
       interc <- lm(phi ~ v1*v2)$coefficients[1]
     } else {
-      interc <- lm(phi ~ v1)$coefficients[1]
+      interc <- lm(phi ~ v1*v2)$coefficients[1]
     }
     f_t <- rbind(f_t, c(interc, mean(phi, na.rm=TRUE)))
   }
@@ -25,8 +25,10 @@ Adjust <- function(set_s, X, gl.Aa, gl.aa) {
   ### We need to compare the estimates of off-diagonal elements to the raw
   ### estimates, and the diagonal elements to the assumed value of 1.00
   w <- which(set_s[,1] == set_s[,2])
-  beta1 <- lm(f_t[-w,1] ~ f_t[-w,2])$coefficients[2]
-  beta2 <- mean(1/f_t[w,1])
+  B1 <- lm(f_t[-w,1] ~ f_t[-w,2])$coefficients[1:2]
+  if( abs(B1[1]) > 0.005 ){ f_t[,1] <- f_t[,1] - B1[1] }
+  beta1 <- B1[2]
+  beta2 <- mean(1/f_t[w,3])
   ## Combining this information gives a reasonable beta
   beta <- beta1*beta2
   list(beta = beta1*beta2, beta1 = beta1)
