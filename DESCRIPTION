@@ -8,7 +8,7 @@ Authors@R: c( person("Anthony", "Herzig", role = "aut"),
               person("Hervé", "Perdry", role = c("cre", "aut"), email = "herve.perdry@u-psud.fr") )
 Description: Computes Kinship Matrices (GRM and Dominance Matrix) from Low Depth Sequencing Data.
 License: GPL-3
-LinkingTo: Rcpp, RcppParallel, RcppEigen
+LinkingTo: gaston, milorGWAS, Rcpp, RcppParallel, RcppEigen
 Depends: gaston, plyr, dplyr, Rcpp, RcppParallel, methods
 Imports:
 NeedsCompilation: yes

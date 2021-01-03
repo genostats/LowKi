@@ -16,8 +16,6 @@ inline void fillKin(NumericMatrix P1, NumericMatrix P2, KinMatrix<scalar_t, C> &
     std::vector<scalar_t> p2(n);
     std::transform( &P1(0,j), &P1(0,j)+n, p1.begin(), [](double a) -> scalar_t { return (scalar_t) a; } );
     std::transform( &P2(0,j), &P2(0,j)+n, p2.begin(), [](double a) -> scalar_t { return (scalar_t) a; } );
-//    std::copy( &P1(0,j), &P1(0,j)+n, p1.begin());
-  //  std::copy( &P2(0,j), &P2(0,j)+n, p2.begin());
     if(domi)
       K.updateDom(p1, p2);
     else
