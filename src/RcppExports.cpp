@@ -32,10 +32,82 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// read_dose_file
+List read_dose_file(CharacterVector filename);
+RcppExport SEXP _LoKi_read_dose_file(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_dose_file(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dose_file_dim
+NumericVector dose_file_dim(CharacterVector filename);
+RcppExport SEXP _LoKi_dose_file_dim(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(dose_file_dim(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nb_inds_dose_file
+int nb_inds_dose_file(CharacterVector filename);
+RcppExport SEXP _LoKi_nb_inds_dose_file(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(nb_inds_dose_file(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// samples_dose_file
+CharacterVector samples_dose_file(CharacterVector filename);
+RcppExport SEXP _LoKi_samples_dose_file(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(samples_dose_file(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// read_vcf_head
+List read_vcf_head(std::string filename);
+RcppExport SEXP _LoKi_read_vcf_head(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_vcf_head(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_vcf_reader
+List test_vcf_reader(std::string filename);
+RcppExport SEXP _LoKi_test_vcf_reader(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_vcf_reader(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
+    {"_LoKi_read_dose_file", (DL_FUNC) &_LoKi_read_dose_file, 1},
+    {"_LoKi_dose_file_dim", (DL_FUNC) &_LoKi_dose_file_dim, 1},
+    {"_LoKi_nb_inds_dose_file", (DL_FUNC) &_LoKi_nb_inds_dose_file, 1},
+    {"_LoKi_samples_dose_file", (DL_FUNC) &_LoKi_samples_dose_file, 1},
+    {"_LoKi_read_vcf_head", (DL_FUNC) &_LoKi_read_vcf_head, 1},
+    {"_LoKi_test_vcf_reader", (DL_FUNC) &_LoKi_test_vcf_reader, 1},
     {NULL, NULL, 0}
 };
 

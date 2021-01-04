@@ -2,9 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include "gaston/gzstream.h"
-// #include "milorGWAS/read_gen_line.h"
-#include "milorGWAS/read_vcf_header.h"
-// #include "milorGWAS/read_vcf_line.h"
 #include "parse_vcf_line_field.h"
 
 #include "milorGWAS/token.h"
@@ -24,6 +21,12 @@ public:
   std::string field;
   T (*str2data) (char *);
 
+  std::string snp_id;
+  int snp_pos, chr;
+  std::string A1, A2;
+  double qual; 
+  std::string filter, info;
+
   std::string line;
   bool good;
   std::vector<std::string> samples; 
@@ -42,7 +45,16 @@ public:
     while(std::getline(in, line)) {
       if(line.substr(0,1) != "#") stop("Bad VCF format");
       if(line.substr(0,2) != "##") {
-        read_vcf_samples(line, samples);
+        // read samples ids
+        stringstream_lite li(line, 9); // 9 = tab sep.
+        std::string G;
+        for(int i = 0; i < 9; i++) { // skip col names
+          if(!(li >> G))
+         stop("VCF file format error");
+        }
+        while(li >> G) { // sample names
+          samples.push_back( G );
+        }
         break; // fin
       }
     }
@@ -61,8 +73,7 @@ public:
   // data un objet avec un membre .push_back(T1)
   // str2data est un pointeur vers une fonction de 'T1 string_to_probas(char *)'
   template<typename T0> 
-  bool read_line(std::string & snp_id, int & snp_pos, int & chr, std::string & A1, std::string & A2, 
-                 double & qual, std::string & filter, std::string & info, T0 & data) {
+  bool read_line(T0 & data) {
     if(!good) return false;
 
     stringstream_lite li(line, 9); // 9 = tab separated
@@ -75,11 +86,17 @@ public:
     int pos = token_position(format, field);
     if(pos < 0) stop("VCF error (No field '" + field + "' found)");
 
+/*
     std::string D;
     while(li >> D) {
       T val = token_at_position(D, pos, str2data);
       data.push_back(val);
     }
+*/
+    while(li.next_token()) {
+      T val = token_at_position(li.token, pos, str2data);
+      data.push_back(val);
+    } 
 
     if(std::getline(in, line))
       good = true;
@@ -88,8 +105,7 @@ public:
     return true;
   }
 
-  bool read_line(std::string & snp_id, int & snp_pos, int & chr, std::string & A1, std::string & A2, 
-                 double & qual, std::string & filter, std::string & info) {
+  bool read_line() {
     if(!good) return false;
 
     stringstream_lite li(line, 9); // 9 = tab separated
