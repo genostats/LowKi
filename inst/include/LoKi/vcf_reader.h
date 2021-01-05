@@ -2,11 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include "gaston/gzstream.h"
-#include "parse_vcf_line_field.h"
-
 #include "milorGWAS/token.h"
 #include "milorGWAS/stringstream_lite.h"
 #include "milorGWAS/chr_convert.h"
+#include "token2.h"
 
 #ifndef VCF_READER
 #define VCF_READER
@@ -15,21 +14,23 @@ using namespace Rcpp;
 
 template<typename T>
 class vcf_reader {
-public:
+private:
   std::string filename;
   igzstream in;
   std::string field;
   T (*str2data) (char *);
-
-  std::string snp_id;
-  int snp_pos, chr;
-  std::string A1, A2;
-  double qual; 
-  std::string filter, info;
-
-  std::string line;
   bool good;
-  std::vector<std::string> samples; 
+  std::string line;
+public:
+  // after calling the constructor, these vectors will be filled with
+  // informations from the file prologue
+  std::vector<std::string> info_ids, format_ids, samples; 
+  // after each call to read_line, these elements will contain the corresponding fields of each line
+  // chr_ is the string corresponding to the chromosome, chr is the result of chr_to_int(chr_)
+  std::string chr_, snp_id, A1, A2, filter, info, format;
+  int snp_pos, chr;
+  double qual; 
+
 
   vcf_reader(std::string file, std::string fi, T (*str2data_) (char *)) : 
        filename(file), in( (char *) &filename[0u] ), field(fi), str2data(str2data_) {
@@ -41,11 +42,23 @@ public:
     if(line.substr(0,1) != "#")
       stop("Not a VCF file");
 
-    // skip description informations
+    // go through description informations
     while(std::getline(in, line)) {
       if(line.substr(0,1) != "#") stop("Bad VCF format");
-      if(line.substr(0,2) != "##") {
-        // read samples ids
+
+      if(line.substr(0,2) == "##") {
+        std::string id;
+        if(line.substr(0,11) == "##INFO=<ID=") { // read info fields
+          std::istringstream li(line);
+          std::getline(li, id, ',');
+          info_ids.push_back(id.substr(11));
+        } 
+        if(line.substr(0,13) == "##FORMAT=<ID=") { // read format fields
+          std::istringstream li(line);
+          std::getline(li, id, ',');
+          format_ids.push_back(id.substr(13));
+        }
+      } else { // read samples ids
         stringstream_lite li(line, 9); // 9 = tab sep.
         std::string G;
         for(int i = 0; i < 9; i++) { // skip col names
@@ -55,7 +68,7 @@ public:
         while(li >> G) { // sample names
           samples.push_back( G );
         }
-        break; // fin
+        break; // fin du prologue
       }
     }
     // read first data line
@@ -77,7 +90,6 @@ public:
     if(!good) return false;
 
     stringstream_lite li(line, 9); // 9 = tab separated
-    std::string format, chr_;
     if(!(li >> chr_ >> snp_pos >> snp_id >> A1 >> A2 >> qual >> filter >> info >> format)) {
       stop("VCF file format error");
     }
@@ -109,7 +121,6 @@ public:
     if(!good) return false;
 
     stringstream_lite li(line, 9); // 9 = tab separated
-    std::string format, chr_;
     if(!(li >> chr_ >> snp_pos >> snp_id >> A1 >> A2 >> qual >> filter >> info >> format)) {
       stop("VCF file format error");
     }

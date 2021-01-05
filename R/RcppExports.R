@@ -9,26 +9,6 @@ mmult <- function(m1) {
     .Call(`_LoKi_mmult`, m1)
 }
 
-read_dose_file <- function(filename) {
-    .Call(`_LoKi_read_dose_file`, filename)
-}
-
-dose_file_dim <- function(filename) {
-    .Call(`_LoKi_dose_file_dim`, filename)
-}
-
-nb_inds_dose_file <- function(filename) {
-    .Call(`_LoKi_nb_inds_dose_file`, filename)
-}
-
-samples_dose_file <- function(filename) {
-    .Call(`_LoKi_samples_dose_file`, filename)
-}
-
-read_vcf_head <- function(filename) {
-    .Call(`_LoKi_read_vcf_head`, filename)
-}
-
 test_vcf_reader <- function(filename) {
     .Call(`_LoKi_test_vcf_reader`, filename)
 }
