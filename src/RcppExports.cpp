@@ -43,11 +43,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bebopalula
+List bebopalula(std::string s);
+RcppExport SEXP _LoKi_bebopalula(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(bebopalula(s));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
     {"_LoKi_test_vcf_reader", (DL_FUNC) &_LoKi_test_vcf_reader, 1},
+    {"_LoKi_bebopalula", (DL_FUNC) &_LoKi_bebopalula, 1},
     {NULL, NULL, 0}
 };
 

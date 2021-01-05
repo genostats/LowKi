@@ -13,3 +13,7 @@ test_vcf_reader <- function(filename) {
     .Call(`_LoKi_test_vcf_reader`, filename)
 }
 
+bebopalula <- function(s) {
+    .Call(`_LoKi_bebopalula`, s)
+}
+
