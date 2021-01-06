@@ -44,7 +44,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // bebopalula
-List bebopalula(std::string s);
+NumericVector bebopalula(std::string s);
 RcppExport SEXP _LoKi_bebopalula(SEXP sSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -54,12 +54,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lowKinVcf
+NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LoKi_lowKinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
+    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
+    Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
+    rcpp_result_gen = Rcpp::wrap(lowKinVcf(filename, field, adjust, domi, constr));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
     {"_LoKi_test_vcf_reader", (DL_FUNC) &_LoKi_test_vcf_reader, 1},
     {"_LoKi_bebopalula", (DL_FUNC) &_LoKi_bebopalula, 1},
+    {"_LoKi_lowKinVcf", (DL_FUNC) &_LoKi_lowKinVcf, 5},
     {NULL, NULL, 0}
 };
 

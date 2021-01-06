@@ -1,10 +1,13 @@
 
 // une classe pour stocker des triplets de probas génotypiques
 // pas de membre x.P0, il faut prendre (1 - x.P1[i] - x.P2[i]) 
-// il y a des push_back (en particulier avec des pairs ou triplets
+// Il y a des push_back (en particulier avec des pairs ou triplets
 // comme argument, ce qui permet l'utilisation de la classe par vcf_reader)
 // et les membres x.P12 et x.P012 pour récupérer des paires ou des
 // triplets.
+
+#ifndef GENOPROBAS
+#define GENOPROBAS
 
 template<typename T>
 class GenoProbas {
@@ -35,6 +38,11 @@ public:
     push_back( std::get<0>(P012), std::get<1>(P012), std::get<2>(P012) );
   }
 
+  void clear() {
+    P1.clear();
+    P2.clear();
+  }
+
   std::pair<T, T> P12(size_t i) {
     return std::make_pair(P1[i], P2[i]);
   }
@@ -49,3 +57,4 @@ public:
   }
 };
 
+#endif

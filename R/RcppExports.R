@@ -17,3 +17,7 @@ bebopalula <- function(s) {
     .Call(`_LoKi_bebopalula`, s)
 }
 
+lowKinVcf <- function(filename, field, adjust, domi, constr) {
+    .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
+}
+
