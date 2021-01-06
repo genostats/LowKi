@@ -5,19 +5,15 @@ lowKincpp <- function(P1, P2, adjust, domi, constr) {
     .Call(`_LoKi_lowKincpp`, P1, P2, adjust, domi, constr)
 }
 
+lowKinVcf <- function(filename, field, adjust, domi, constr) {
+    .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
+}
+
 mmult <- function(m1) {
     .Call(`_LoKi_mmult`, m1)
 }
 
 test_vcf_reader <- function(filename) {
     .Call(`_LoKi_test_vcf_reader`, filename)
-}
-
-bebopalula <- function(s) {
-    .Call(`_LoKi_bebopalula`, s)
-}
-
-lowKinVcf <- function(filename, field, adjust, domi, constr) {
-    .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
 }
 

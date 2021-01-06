@@ -1,5 +1,6 @@
 #include "vcf_reader.h"
 #include "PL2probs.h"
+#include "GP2probs.h"
 #include "GenoProbas.h"
 #include "coeffRegression.h"
 #include "coeffRegressionBis.h"
@@ -7,13 +8,20 @@
 #include "KinMatrix.h"
 #include <Rcpp.h>
 
+/*
 //[[Rcpp::export]]
 NumericVector bebopalula(std::string s) {
   std::pair<double, double> R = PL2probs<double>((char *) s.c_str());
   return NumericVector::create(1 - R.first - R.second, R.first, R.second);
 }
 
+//[[Rcpp::export]]
+NumericVector bebopalulu(std::string s) {
+  std::pair<double, double> R = GP2probs<double>((char *) s.c_str());
+  return NumericVector::create(1 - R.first - R.second, R.first, R.second);
+}
 
+*/
 template<typename T, typename scalar_t, class C>
 inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool domi) {
   GenoProbas<scalar_t> probs( VCF.samples.size() );
@@ -31,10 +39,12 @@ NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bo
   std::pair<float,float> (* CONVERT) (char *);
   if(field == "PL")
     CONVERT = PL2probs<float>;
+  else if(field == "GP")
+    CONVERT = GP2probs<float>;
   else
     stop("Unable to use field "+field);
 
-  vcf_reader<std::pair<float,float>> VCF( filename, "PL", CONVERT); //PL2probs<float> );
+  vcf_reader<std::pair<float,float>> VCF( filename, field, CONVERT); //PL2probs<float> );
   int n = VCF.samples.size();
   if(adjust) {
     if(constr) {

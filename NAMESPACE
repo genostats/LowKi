@@ -3,5 +3,6 @@
 export(lowDM)
 export(lowGRM)
 export(lowKin)
+export(lowKin.vcf)
 importFrom(Rcpp,evalCpp)
 useDynLib(LoKi, .registration=TRUE)
