@@ -21,6 +21,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// aprx
+double aprx(NumericVector x, List L, NumericVector F_, IntegerVector ruleLeft, IntegerVector ruleRight, IntegerVector I, int k);
+RcppExport SEXP _LoKi_aprx(SEXP xSEXP, SEXP LSEXP, SEXP F_SEXP, SEXP ruleLeftSEXP, SEXP ruleRightSEXP, SEXP ISEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< List >::type L(LSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type F_(F_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type ruleLeft(ruleLeftSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type ruleRight(ruleRightSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type I(ISEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(aprx(x, L, F_, ruleLeft, ruleRight, I, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 // lowKinVcf
 NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
 RcppExport SEXP _LoKi_lowKinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
@@ -47,6 +64,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// essai_array
+double essai_array(NumericVector A, IntegerVector I);
+RcppExport SEXP _LoKi_essai_array(SEXP ASEXP, SEXP ISEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type A(ASEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type I(ISEXP);
+    rcpp_result_gen = Rcpp::wrap(essai_array(A, I));
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_vcf_reader
 List test_vcf_reader(std::string filename);
 RcppExport SEXP _LoKi_test_vcf_reader(SEXP filenameSEXP) {
@@ -61,8 +90,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
+    {"_LoKi_aprx", (DL_FUNC) &_LoKi_aprx, 7},
     {"_LoKi_lowKinVcf", (DL_FUNC) &_LoKi_lowKinVcf, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
+    {"_LoKi_essai_array", (DL_FUNC) &_LoKi_essai_array, 2},
     {"_LoKi_test_vcf_reader", (DL_FUNC) &_LoKi_test_vcf_reader, 1},
     {NULL, NULL, 0}
 };

@@ -5,12 +5,20 @@ lowKincpp <- function(P1, P2, adjust, domi, constr) {
     .Call(`_LoKi_lowKincpp`, P1, P2, adjust, domi, constr)
 }
 
+aprx <- function(x, L, F_, ruleLeft, ruleRight, I, k) {
+    .Call(`_LoKi_aprx`, x, L, F_, ruleLeft, ruleRight, I, k)
+}
+
 lowKinVcf <- function(filename, field, adjust, domi, constr) {
     .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
 }
 
 mmult <- function(m1) {
     .Call(`_LoKi_mmult`, m1)
+}
+
+essai_array <- function(A, I) {
+    .Call(`_LoKi_essai_array`, A, I)
 }
 
 test_vcf_reader <- function(filename) {
