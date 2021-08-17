@@ -22,7 +22,7 @@ Adjust <- function(set_s, X, gl.Aa, gl.aa) {
   ### estimates, and the diagonal elements to the assumed value of 1.00
   w <- which(set_s[,1] == set_s[,2])
   B1 <- lm(f_t[-w,1] ~ f_t[-w,2])$coefficients[1:2]
-  if( abs(B1[1]) > 0.005 ){ f_t[,1] <- f_t[,1] - B1[1] }
+  f_t[,1] <- f_t[,1] - B1[1]
   beta1 <- B1[2]
   beta2 <- mean(1/f_t[w,1])
   ## Combining this information gives a reasonable beta
