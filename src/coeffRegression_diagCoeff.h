@@ -20,6 +20,10 @@ public:
   scalar_t getPhi() {
     return phi / n;
   }
+
+  // phi = estimateur à un SNP pour un individu avec lui meme
+  // v = variance/fuziness en ce SNP
+  // la régression est ~ 1 + v
  
   void update(scalar_t phi_, scalar_t v_) {
     if(std::isfinite(phi_) && std::isfinite(v_)) {

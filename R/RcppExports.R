@@ -17,6 +17,10 @@ mmult <- function(m1) {
     .Call(`_LoKi_mmult`, m1)
 }
 
+readVcfProbas <- function(filename, field) {
+    .Call(`_LoKi_readVcfProbas`, filename, field)
+}
+
 essai_array <- function(A, I) {
     .Call(`_LoKi_essai_array`, A, I)
 }

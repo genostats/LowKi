@@ -23,7 +23,7 @@ inline void fillKin(NumericMatrix P1, NumericMatrix P2, KinMatrix<scalar_t, C> &
   }
 }
 
-// (proof of principle)
+// (proof of principle: working on numeric matrix)
 // calcule la GRM et tous les coefficients de régression, en considant les colonnes de P1 et P2 une à une (SNP par SNP)
 // (ce sont les matrices de probas des genotypes 1 et 2)
 // [[Rcpp::export]]

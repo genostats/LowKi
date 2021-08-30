@@ -64,6 +64,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// readVcfProbas
+List readVcfProbas(std::string filename, std::string field);
+RcppExport SEXP _LoKi_readVcfProbas(SEXP filenameSEXP, SEXP fieldSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    rcpp_result_gen = Rcpp::wrap(readVcfProbas(filename, field));
+    return rcpp_result_gen;
+END_RCPP
+}
 // essai_array
 double essai_array(NumericVector A, IntegerVector I);
 RcppExport SEXP _LoKi_essai_array(SEXP ASEXP, SEXP ISEXP) {
@@ -93,6 +105,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_aprx", (DL_FUNC) &_LoKi_aprx, 7},
     {"_LoKi_lowKinVcf", (DL_FUNC) &_LoKi_lowKinVcf, 5},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
+    {"_LoKi_readVcfProbas", (DL_FUNC) &_LoKi_readVcfProbas, 2},
     {"_LoKi_essai_array", (DL_FUNC) &_LoKi_essai_array, 2},
     {"_LoKi_test_vcf_reader", (DL_FUNC) &_LoKi_test_vcf_reader, 1},
     {NULL, NULL, 0}

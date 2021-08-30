@@ -44,7 +44,7 @@ NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bo
   else
     stop("Unable to use field "+field);
 
-  vcf_reader<std::pair<float,float>> VCF( filename, field, CONVERT); //PL2probs<float> );
+  vcf_reader<std::pair<float,float>> VCF(filename, field, CONVERT);
   int n = VCF.samples.size();
   if(adjust) {
     if(constr) {

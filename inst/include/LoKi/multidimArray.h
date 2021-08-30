@@ -1,8 +1,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-#ifndef multidimArray
-#define multidimArray
+#ifndef _multidimArray_
+#define _multidimArray_
 
 // A read-only array that allows to use R arrays
 // (could be extended to r/w array if needed...)

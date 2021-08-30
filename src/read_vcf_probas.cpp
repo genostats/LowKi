@@ -1,34 +1,26 @@
-#include <Rcpp.h>
+#include "vcf_reader.h"
+#include "PL2probs.h"
+#include "GP2probs.h"
+#include "GenoProbas.h"
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "vcf_reader.h"
-
-using namespace Rcpp;
-
-template<typename scalar_t>
-inline scalar_t geno_conv(char * s) {
-  int le = strlen(s);
-  scalar_t g = 0;
-  if(le == 3) { // cas diploide
-    if(s[0] == '1') g++;
-    if(s[2] == '1') g++;
-    if(s[0] == '.' || s[2] == '.') g = 3; // missing value : NA
-  } else if(le == 1) { // cas haploide
-    if(s[0] == '1') g++;
-    if(s[0] == '.') g = 3; // missing value : NA
-  } else {
-    g = 3;
-  }
-  return g;
-}
+#include <Rcpp.h>
 
 //[[Rcpp::export]]
-List test_vcf_reader(std::string filename) {
-  vcf_reader<int> VCF( filename, "GT", geno_conv<int> );
+List readVcfProbas(std::string filename, std::string field) {
+  std::pair<double,double> (* CONVERT) (char *);
+  if(field == "PL")
+    CONVERT = PL2probs<double>;
+  else if(field == "GP")
+    CONVERT = GP2probs<double>;
+  else
+    stop("Unable to use field "+field);
+
+  vcf_reader<std::pair<double,double>> VCF(filename, field, CONVERT);
   std::vector<std::string> SNP_ID, AL1, AL2;
   std::vector<int> CHR, POS;
-  std::vector<int> data;
+  std::vector<std::pair<double,double>> data;
   int last_len(0), nb_ind(-1);
   while( VCF.read_line(data) ) {
     // check for right number of datas
@@ -48,16 +40,25 @@ List test_vcf_reader(std::string filename) {
     AL1.push_back(VCF.A1);
     AL2.push_back(VCF.A2);
   }
+
+  // transformer le vecteur de std pair en deux matrices
+  NumericMatrix P1(data.size()/POS.size(), POS.size());
+  NumericMatrix P2(data.size()/POS.size(), POS.size());
+  for(int i = 0; i < data.size(); i++) { 
+    P1[i] = data[i].first;  // on accède aux éléments du vecteur sous jacent à P1...
+    P2[i] = data[i].second;
+  }
+
   List L;
   L["snp.id"] = wrap(SNP_ID);
   L["chr"] = wrap(CHR);
   L["pos"] = wrap(POS);
   L["A1"] = wrap(AL1);
   L["A2"] = wrap(AL2);
-  if(VCF.samples.size()> 0) L["samples"] = wrap(VCF.samples); // VCF ou PES
-  IntegerVector dat = wrap(data);
-  dat.attr("dim") = Dimension( data.size()/POS.size(), POS.size() );
-  L["data"] = dat;
+  L["samples"] = wrap(VCF.samples); 
+
+  L["P1"] = P1;
+  L["P2"] = P2;
   return L;
 }
 

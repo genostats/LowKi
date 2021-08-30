@@ -148,6 +148,7 @@ public:
     return true;
   }
 
+  // --------------------------------------------------------------------
   bool read_line() {
     if(!good) return false;
 
