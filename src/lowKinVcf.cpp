@@ -6,6 +6,7 @@
 #include "coeffRegressionBis.h"
 #include "coeff.h"
 #include "KinMatrix.h"
+#include "PartialKinMatrix.h"
 #include "RawKinMatrix.h"
 #include <Rcpp.h>
 
@@ -36,8 +37,20 @@ inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool dom
   }
 }
 
+template<typename T, typename scalar_t, class C>
+inline void fillKinVcf(vcf_reader<T> & VCF, PartialKinMatrix<scalar_t, C> & K, bool domi) {
+  GenoProbas<scalar_t> probs( VCF.samples.size() );
+  while(VCF.read_line(probs)) {
+    if(domi) 
+      K.updateDom(probs.P1, probs.P2);
+    else
+      K.updateAdd(probs.P1, probs.P2);
+    probs.clear(); // remise à zero des vecteurs P1/P2 dans probs
+  }
+}
+
 // [[Rcpp::export]]
-NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr) {
+NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr) {
   std::pair<float,float> (* CONVERT) (char *);
   if(field == "PL")
     CONVERT = PL2probs<float>;
@@ -60,6 +73,42 @@ NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bo
     }
   } else {
     KinMatrix<float, coeff> K(n);
+    fillKinVcf(VCF, K, domi);
+    return K.getRawMatrix();
+  }
+} 
+
+// !!!!!!!!! Attention le vecteur Index est utilisé pour des C++ index (premier élément = indice 0)
+// [[Rcpp::export]]
+NumericMatrix PartialKinVcf(std::string filename, IntegerVector Index, std::string field, bool adjust, bool domi, bool constr) {
+  std::pair<float,float> (* CONVERT) (char *);
+  if(field == "PL")
+    CONVERT = PL2probs<float>;
+  else if(field == "GP")
+    CONVERT = GP2probs<float>;
+  else
+    stop("Unable to use field "+field);
+
+  vcf_reader<std::pair<float,float>> VCF(filename, field, CONVERT);
+  int n = VCF.samples.size();
+  // check index...
+  for(int i : Index) {
+    if(i > n-1)
+      stop("Index too large");
+  }
+
+  if(adjust) {
+    if(constr) {
+      PartialKinMatrix<float, coeffRegressionBis> K(Index);
+      fillKinVcf(VCF, K, domi);
+      return K.getInterceptMatrix();
+    } else {
+      PartialKinMatrix<float, coeffRegression> K(Index);
+      fillKinVcf(VCF, K, domi);
+      return K.getInterceptMatrix();
+    }
+  } else {
+    PartialKinMatrix<float, coeff> K(Index);
     fillKinVcf(VCF, K, domi);
     return K.getRawMatrix();
   }

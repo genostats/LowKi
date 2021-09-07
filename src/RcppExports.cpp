@@ -38,9 +38,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// lowKinVcf
-NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
-RcppExport SEXP _LoKi_lowKinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
+// KinVcf
+NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LoKi_KinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -49,7 +49,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
     Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
     Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
-    rcpp_result_gen = Rcpp::wrap(lowKinVcf(filename, field, adjust, domi, constr));
+    rcpp_result_gen = Rcpp::wrap(KinVcf(filename, field, adjust, domi, constr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// PartialKinVcf
+NumericMatrix PartialKinVcf(std::string filename, IntegerVector Index, std::string field, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LoKi_PartialKinVcf(SEXP filenameSEXP, SEXP IndexSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type Index(IndexSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
+    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
+    Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
+    rcpp_result_gen = Rcpp::wrap(PartialKinVcf(filename, Index, field, adjust, domi, constr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -116,7 +132,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_aprx", (DL_FUNC) &_LoKi_aprx, 7},
-    {"_LoKi_lowKinVcf", (DL_FUNC) &_LoKi_lowKinVcf, 5},
+    {"_LoKi_KinVcf", (DL_FUNC) &_LoKi_KinVcf, 5},
+    {"_LoKi_PartialKinVcf", (DL_FUNC) &_LoKi_PartialKinVcf, 6},
     {"_LoKi_RawKinVcf", (DL_FUNC) &_LoKi_RawKinVcf, 3},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
     {"_LoKi_readVcfProbas", (DL_FUNC) &_LoKi_readVcfProbas, 2},

@@ -11,10 +11,9 @@
 template<typename scalar_t>
 class RawKinMatrix {
   int size;
-  public:
   std::vector<scalar_t> Coeffs;
   std::vector<scalar_t> nbSnps; // pour chaque paire, le nb de snps pour lequel on a une estimation finie
-
+  public:
   RawKinMatrix(unsigned int n) : size(n), Coeffs( (n*(n+1))/2, 0), nbSnps( (n*(n+1))/2, 0) {};
   void updateAdd(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);
   void updateDom(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);

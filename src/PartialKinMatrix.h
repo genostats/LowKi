@@ -1,21 +1,35 @@
 #include <Rcpp.h>
 #include "mean_isfinite.h"
 
-#ifndef _loki_kinmatrix_
-#define _loki_kinmatrix_
+#ifndef _loki_partialkinmatrix_
+#define _loki_partialkinmatrix_
 
-/* computes the KinMatrix and does the regression of the coeffs on (vi vj)
- * the regression model is defined in the COEFF class...
- * (I admit this is a bit convoluted)
+/* same as KinMatrix but computes the coefficients for a subset of individuals only
+ * !! Still uses the whole probability vector to compute mu1 and mu2
+ * An alternative would have been to give mu1 / mu2 to the update functions but
+ * I don't think this would have been any better
+ * Also the class KinMatrix could have been modified to avoid having two classes
+ * but it's messy enough already
  */
 
+template<typename scalar_t>
+using VECTOR4 = Eigen::Matrix<scalar_t, 4, 1>;
+
+template<typename scalar_t>
+using VECTOR2 = Eigen::Matrix<scalar_t, 2, 1>;
+
 template<typename scalar_t, class COEFF>
-class KinMatrix {
+class PartialKinMatrix {
   int size;
   std::vector<typename COEFF::template diagCoeff<scalar_t>> diagonale;
   std::vector<typename COEFF::template offDiagCoeff<scalar_t>> offDiagonale;
+  std::vector<int> INDEX;
   public:
-  KinMatrix(unsigned int n) : size(n), diagonale(n), offDiagonale( (n*(n-1))/2 ) {};
+  template<typename intVec>
+  PartialKinMatrix(intVec Index) : size(Index.size()), diagonale(size), offDiagonale( (size*(size-1))/2 ) {
+    // copie du vecteur d'indices
+    for(int a : Index) INDEX.push_back(a);
+  }
   void updateAdd(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);
   void updateDom(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);
   Rcpp::NumericMatrix getRawMatrix();
@@ -26,7 +40,7 @@ class KinMatrix {
 
 // prend un SNP et update toute la matrice
 template <typename scalar_t, class COEFF>
-void KinMatrix<scalar_t, COEFF>::updateAdd(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2) {
+void PartialKinMatrix<scalar_t, COEFF>::updateAdd(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2) {
   scalar_t mu1 = mean_isfinite(P1);
   scalar_t mu2 = mean_isfinite(P2);
   scalar_t mu0 = 1 - mu1 - mu2;
@@ -38,17 +52,15 @@ void KinMatrix<scalar_t, COEFF>::updateAdd(const std::vector<scalar_t> & P1, con
   scalar_t alpha = 1/std::sqrt(Vad);
   scalar_t mu = mu1 + 2*mu2;
   scalar_t u0 = alpha*(0 - mu);
-  // scalar_t u1 = alpha*(1 - mu);
-  // scalar_t u2 = alpha*(2 - mu);
 
   int k = 0;
-  for(int i = 0; i < size; i++) {
-    // scalar_t Xi = (1-P1[i]-P2[i])*u0 + P1[i]*u1 + P2[i]*u2:
+  for(int ii = 0; ii < size; ii++) {
+    int i = INDEX[ii];
     scalar_t Xi = u0 + P1[i]*alpha + P2[i]*2*alpha;
     scalar_t vi = P1[i]*(1 - P1[i]) + 4*P2[i]*(1 - P2[i]) - 4*P1[i]*P2[i];
-if(i == 4) std::cout << Xi << "," << vi << " ";
-    diagonale[i].update(Xi*Xi, vi);
-    for(int j = i+1; j < size; j++) {
+    diagonale[ii].update(Xi*Xi, vi); // attention on update diag[ii]
+    for(int jj = ii+1; jj < size; jj++) {
+      int j = INDEX[jj];
       scalar_t Xj = u0 + P1[j]*alpha + P2[j]*2*alpha;
       scalar_t vj = P1[j]*(1 - P1[j]) + 4*P2[j]*(1 - P2[j]) - 4*P1[j]*P2[j];
       offDiagonale[k++].update(Xi*Xj, vi, vj);
@@ -58,7 +70,7 @@ if(i == 4) std::cout << Xi << "," << vi << " ";
 
 // idem pour le calcul de la matrice de dominance
 template <typename scalar_t, class COEFF>
-void KinMatrix<scalar_t, COEFF>::updateDom(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2) {
+void PartialKinMatrix<scalar_t, COEFF>::updateDom(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2) {
   scalar_t mu1 = mean_isfinite(P1);
   scalar_t mu2 = mean_isfinite(P2);
   scalar_t mu0 = 1 - mu1 - mu2;
@@ -73,11 +85,13 @@ void KinMatrix<scalar_t, COEFF>::updateDom(const std::vector<scalar_t> & P1, con
   scalar_t u2 = 1/u0;
   
   int k = 0;
-  for(int i = 0; i < size; i++) {
+  for(int ii = 0; ii < size; ii++) {
+    int i = INDEX[ii];
     scalar_t Xi = (1-P1[i]-P2[i])*u0 + P1[i]*u1 + P2[i]*u2;
     scalar_t vi = P1[i]*(1 - P1[i]) + 4*P2[i]*(1 - P2[i]) - 4*P1[i]*P2[i];
-    diagonale[i].update(Gamma*Xi*Xi, vi);
-    for(int j = i+1; j < size; j++) {
+    diagonale[ii].update(Gamma*Xi*Xi, vi); // attention on update diag[ii]
+    for(int jj = ii+1; jj < size; jj++) {
+      int j = INDEX[jj];
       scalar_t Xj = (1-P1[j]-P2[j])*u0 + P1[j]*u1 + P2[j]*u2;
       scalar_t vj = P1[j]*(1 - P1[j]) + 4*P2[j]*(1 - P2[j]) - 4*P1[j]*P2[j];
       offDiagonale[k++].update(Gamma*Xi*Xj, vi, vj);
@@ -88,7 +102,7 @@ void KinMatrix<scalar_t, COEFF>::updateDom(const std::vector<scalar_t> & P1, con
 
 // renvoie la matrice symétrique des coeffs bruts...
 template <typename scalar_t, class COEFF>
-Rcpp::NumericMatrix KinMatrix<scalar_t, COEFF>::getRawMatrix() {
+Rcpp::NumericMatrix PartialKinMatrix<scalar_t, COEFF>::getRawMatrix() {
   Rcpp::NumericMatrix R = Rcpp::no_init_matrix(size, size);
   int k = 0;
   for(int i = 0; i < size; i++) {
@@ -108,7 +122,7 @@ Rcpp::NumericMatrix KinMatrix<scalar_t, COEFF>::getRawMatrix() {
 
 // renvoie la matrice symétrique des intercepts
 template <typename scalar_t, class COEFF>
-Rcpp::NumericMatrix KinMatrix<scalar_t, COEFF>::getInterceptMatrix() {
+Rcpp::NumericMatrix PartialKinMatrix<scalar_t, COEFF>::getInterceptMatrix() {
   Rcpp::NumericMatrix R = Rcpp::no_init_matrix(size, size);
   int k = 0;
   for(int i = 0; i < size; i++) {

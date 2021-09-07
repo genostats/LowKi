@@ -12,12 +12,16 @@
 #'
 #' @examples
 
-lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, dominance = FALSE, constraint = TRUE) {
+lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, dominance = FALSE, constraint = TRUE, index) {
   filename <- path.expand(filename)
   field <- match.arg(field)
-  if(adjust)
-    lowKinVcf(filename, field, adjust, dominance, constraint)
-  else 
-    RawKinVcf(filename, field, dominance)
+  if(missing(index)) {
+    if(adjust)
+      KinVcf(filename, field, adjust, dominance, constraint)
+    else 
+      RawKinVcf(filename, field, dominance)
+  } else {
+      PartialKinVcf(filename, index - 1L, field, adjust, dominance, constraint)
+  }
 }
 

@@ -9,8 +9,12 @@ aprx <- function(x, L, F_, ruleLeft, ruleRight, I, k) {
     .Call(`_LoKi_aprx`, x, L, F_, ruleLeft, ruleRight, I, k)
 }
 
-lowKinVcf <- function(filename, field, adjust, domi, constr) {
-    .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
+KinVcf <- function(filename, field, adjust, domi, constr) {
+    .Call(`_LoKi_KinVcf`, filename, field, adjust, domi, constr)
+}
+
+PartialKinVcf <- function(filename, Index, field, adjust, domi, constr) {
+    .Call(`_LoKi_PartialKinVcf`, filename, Index, field, adjust, domi, constr)
 }
 
 RawKinVcf <- function(filename, field, domi) {
