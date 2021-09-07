@@ -15,7 +15,7 @@ class RawKinMatrix {
   std::vector<scalar_t> Coeffs;
   std::vector<scalar_t> nbSnps; // pour chaque paire, le nb de snps pour lequel on a une estimation finie
 
-  RawKinMatrix(unsigned int n) : size(n), nbSnps(0), Coeffs( (n*(n+1))/2, 0), nbSnps( (n*(n+1))/2, 0) {};
+  RawKinMatrix(unsigned int n) : size(n), Coeffs( (n*(n+1))/2, 0), nbSnps( (n*(n+1))/2, 0) {};
   void updateAdd(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);
   void updateDom(const std::vector<scalar_t> & P1, const std::vector<scalar_t> & P2);
   Rcpp::NumericMatrix getRawMatrix();
@@ -45,12 +45,20 @@ void RawKinMatrix<scalar_t>::updateAdd(const std::vector<scalar_t> & P1, const s
       Coeffs[k] += Xi*Xi;
       nbSnps[k] += 1;
     }
-    for(int j = i+1; j < size; j++) {
-      scalar_t Xj = u0 + P1[j]*alpha + P2[j]*2*alpha;
-      Coeffs[k++] += Xi*Xj;
+    k++;
+    if(std::isfinite(Xi)) {
+      for(int j = i+1; j < size; j++) {
+        scalar_t Xj = u0 + P1[j]*alpha + P2[j]*2*alpha;
+        if(std::isfinite(Xj)) {
+          Coeffs[k] += Xi*Xj;
+          nbSnps[k] += 1;
+        }
+        k++;
+      }
+    } else {
+      k += (size-i-1);
     }
   }
-  nbSnps++;
 }
 
 // idem pour le calcul de la matrice de dominance
@@ -72,13 +80,24 @@ void RawKinMatrix<scalar_t>::updateDom(const std::vector<scalar_t> & P1, const s
   int k = 0;
   for(int i = 0; i < size; i++) {
     scalar_t Xi = (1-P1[i]-P2[i])*u0 + P1[i]*u1 + P2[i]*u2;
-    Coeffs[k++] += Gamma*Xi*Xi;
-    for(int j = i+1; j < size; j++) {
-      scalar_t Xj = (1-P1[j]-P2[j])*u0 + P1[j]*u1 + P2[j]*u2;
-      Coeffs[k++] += Gamma*Xi*Xj;
+    if(std::isfinite(Xi)) {
+      Coeffs[k] += Gamma*Xi*Xi;
+      nbSnps[k] += 1;
+    }
+    k++;
+    if(std::isfinite(Xi)) {
+      for(int j = i+1; j < size; j++) {
+        scalar_t Xj = (1-P1[j]-P2[j])*u0 + P1[j]*u1 + P2[j]*u2;
+        if(std::isfinite(Xj)) {
+          Coeffs[k] += Gamma*Xi*Xj;
+          nbSnps[k] += 1;
+        }
+        k++;
+      }
+    } else {
+      k += (size-i-1);
     }
   }
-  nbSnps++;
 }
 
 
@@ -88,9 +107,11 @@ Rcpp::NumericMatrix RawKinMatrix<scalar_t>::getRawMatrix() {
   Rcpp::NumericMatrix R = Rcpp::no_init_matrix(size, size);
   int k = 0;
   for(int i = 0; i < size; i++) {
-    R(i,i) = (double) Coeffs[k++] / (double) nbSnps;
+    R(i,i) = (double) Coeffs[k] / (double) nbSnps[k];
+    k++;
     for(int j = i+1; j < size; j++) {
-      R(j,i) = (double) Coeffs[k++] / (double) nbSnps;
+      R(j,i) = (double) Coeffs[k] / (double) nbSnps[k];
+      k++;
     }
   }
   // symétriser
