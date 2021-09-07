@@ -1,4 +1,5 @@
 v <- function(P1, P2) P1*(1-P1) + 4*P2*(1-P2) - 4*P1*P2
+
 Adjust <- function(set_s, X, gl.Aa, gl.aa) {
   ## for each pair selected, run our linear regression
   f_t <- NULL

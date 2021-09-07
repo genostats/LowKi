@@ -13,6 +13,10 @@ lowKinVcf <- function(filename, field, adjust, domi, constr) {
     .Call(`_LoKi_lowKinVcf`, filename, field, adjust, domi, constr)
 }
 
+RawKinVcf <- function(filename, field, domi) {
+    .Call(`_LoKi_RawKinVcf`, filename, field, domi)
+}
+
 mmult <- function(m1) {
     .Call(`_LoKi_mmult`, m1)
 }

@@ -6,6 +6,7 @@
 #include "coeffRegressionBis.h"
 #include "coeff.h"
 #include "KinMatrix.h"
+#include "RawKinMatrix.h"
 #include <Rcpp.h>
 
 /*
@@ -22,6 +23,7 @@ NumericVector bebopalulu(std::string s) {
 }
 
 */
+
 template<typename T, typename scalar_t, class C>
 inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool domi) {
   GenoProbas<scalar_t> probs( VCF.samples.size() );
@@ -61,5 +63,32 @@ NumericMatrix lowKinVcf(std::string filename, std::string field, bool adjust, bo
     fillKinVcf(VCF, K, domi);
     return K.getRawMatrix();
   }
+} 
+
+// [[Rcpp::export]]
+NumericMatrix RawKinVcf(std::string filename, std::string field, bool domi) {
+  std::pair<float,float> (* CONVERT) (char *);
+  if(field == "PL")
+    CONVERT = PL2probs<float>;
+  else if(field == "GP")
+    CONVERT = GP2probs<float>;
+  else
+    stop("Unable to use field "+field);
+
+  vcf_reader<std::pair<float,float>> VCF(filename, field, CONVERT);
+  int n = VCF.samples.size();
+
+  RawKinMatrix<float> K(n);
+  GenoProbas<float> probs( VCF.samples.size() );
+
+  while(VCF.read_line(probs)) {
+    if(domi) 
+      K.updateDom(probs.P1, probs.P2);
+    else
+      K.updateAdd(probs.P1, probs.P2);
+    probs.clear(); // remise à zero des vecteurs P1/P2 dans probs
+  }
+
+  return K.getRawMatrix();
 } 
 

@@ -53,6 +53,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// RawKinVcf
+NumericMatrix RawKinVcf(std::string filename, std::string field, bool domi);
+RcppExport SEXP _LoKi_RawKinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP domiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
+    rcpp_result_gen = Rcpp::wrap(RawKinVcf(filename, field, domi));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mmult
 NumericMatrix mmult(const NumericMatrix& m1);
 RcppExport SEXP _LoKi_mmult(SEXP m1SEXP) {
@@ -104,6 +117,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_LoKi_lowKincpp", (DL_FUNC) &_LoKi_lowKincpp, 5},
     {"_LoKi_aprx", (DL_FUNC) &_LoKi_aprx, 7},
     {"_LoKi_lowKinVcf", (DL_FUNC) &_LoKi_lowKinVcf, 5},
+    {"_LoKi_RawKinVcf", (DL_FUNC) &_LoKi_RawKinVcf, 3},
     {"_LoKi_mmult", (DL_FUNC) &_LoKi_mmult, 1},
     {"_LoKi_readVcfProbas", (DL_FUNC) &_LoKi_readVcfProbas, 2},
     {"_LoKi_essai_array", (DL_FUNC) &_LoKi_essai_array, 2},

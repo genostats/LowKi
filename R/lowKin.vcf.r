@@ -15,6 +15,9 @@
 lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, dominance = FALSE, constraint = TRUE) {
   filename <- path.expand(filename)
   field <- match.arg(field)
-  lowKinVcf(filename, field, adjust, dominance, constraint)
+  if(adjust)
+    lowKinVcf(filename, field, adjust, dominance, constraint)
+  else 
+    RawKinVcf(filename, field, dominance)
 }
 
