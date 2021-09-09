@@ -46,7 +46,6 @@ void KinMatrix<scalar_t, COEFF>::updateAdd(const std::vector<scalar_t> & P1, con
     // scalar_t Xi = (1-P1[i]-P2[i])*u0 + P1[i]*u1 + P2[i]*u2:
     scalar_t Xi = u0 + P1[i]*alpha + P2[i]*2*alpha;
     scalar_t vi = P1[i]*(1 - P1[i]) + 4*P2[i]*(1 - P2[i]) - 4*P1[i]*P2[i];
-if(i == 4) std::cout << Xi << "," << vi << " ";
     diagonale[i].update(Xi*Xi, vi);
     for(int j = i+1; j < size; j++) {
       scalar_t Xj = u0 + P1[j]*alpha + P2[j]*2*alpha;

@@ -28,8 +28,8 @@ lowDM1 <- function(a, adjust = TRUE, adjust.param = c(25,50)) {
   cat("computing matrix...\n")
 
   D_GL_D <- mmult(XD)
-  rownames(D_GL_D) <- Glmat[[4]];
-  colnames(D_GL_D) <- Glmat[[4]]
+  rownames(D_GL_D) <- a$samples;
+  colnames(D_GL_D) <- a$samples;
   
   if(adjust) {
     cat("adjusting...\n")
