@@ -38,12 +38,9 @@ void KinMatrix<scalar_t, COEFF>::updateAdd(const std::vector<scalar_t> & P1, con
   scalar_t alpha = 1/std::sqrt(Vad);
   scalar_t mu = mu1 + 2*mu2;
   scalar_t u0 = alpha*(0 - mu);
-  // scalar_t u1 = alpha*(1 - mu);
-  // scalar_t u2 = alpha*(2 - mu);
 
   int k = 0;
   for(int i = 0; i < size; i++) {
-    // scalar_t Xi = (1-P1[i]-P2[i])*u0 + P1[i]*u1 + P2[i]*u2:
     scalar_t Xi = u0 + P1[i]*alpha + P2[i]*2*alpha;
     scalar_t vi = P1[i]*(1 - P1[i]) + 4*P2[i]*(1 - P2[i]) - 4*P1[i]*P2[i];
     diagonale[i].update(Xi*Xi, vi);
