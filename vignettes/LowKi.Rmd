@@ -1,0 +1,39 @@
+---
+title: "LowKi: kinship matrix from low depth data"
+author: "Anthony Herzig and Hervé Perdry"
+date: "`r Sys.Date()`"
+output: pdf_document
+vignette: >
+  %\VignetteIndexEntry{LowKi}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r message=FALSE, warning=FALSE, echo = FALSE}
+library("knitr")
+library("LowKi")
+```
+
+# Example of data analysis
+
+We have included a small simulated data set in `LowKi`.
+
+```{r fig.width=10, fig.height=5}
+K.real <- readRDS("/tmp/extdata/kinship.rds")
+K.low <- lowKin.vcf("/tmp/extdata/essai.vcf")
+
+z <- read.vcf("/tmp/extdata/essai.vcf")
+K.gen <- GRM(z)
+
+par(mfrow=c(1,2))
+plot(K.real, K.low, pch = ".", cex = 2); abline(0,1,col="red")
+plot(K.real, K.gen, pch = ".", cex = 2); abline(0,1,col="red")
+
+D.real <- readRDS("inst/extdata/fraternity.rds")
+D.low <- lowKin.vcf("inst/extdata/essai.vcf.gz", fraternity = TRUE)
+D.gen <- DM(z)
+
+plot(D.real, D.low, pch = ".", cex = 2, xlim = c(0,0.5), ylim = c(-0.1,0.5)); abline(0,1,col="red")
+plot(D.real, D.gen, pch = ".", cex = 2, xlim = c(0,0.5), ylim = c(-0.1,0.5)); abline(0,1,col="red")
+
+```

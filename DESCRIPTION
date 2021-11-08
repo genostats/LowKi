@@ -1,11 +1,11 @@
-Package: LoKi
+Package: LowKi
 Type: Package
 Title: Low Depth Kinship
 Version: 0.1
 Date: 2020-10-26
 Encoding: UTF-8 
 Authors@R: c( person("Anthony", "Herzig", role = "aut"),
-              person("Hervé", "Perdry", role = c("cre", "aut"), email = "herve.perdry@u-psud.fr") )
+              person("Hervé", "Perdry", role = c("cre", "aut"), email = "herve.perdry@universite-paris-saclay.fr") )
 Description: Computes Kinship Matrices (GRM and Dominance Matrix) from Low Depth Sequencing Data.
 License: GPL-3
 LinkingTo: gaston, milorGWAS, Rcpp, RcppParallel, RcppEigen

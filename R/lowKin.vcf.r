@@ -3,8 +3,7 @@
 #' @param filename path to a VCF file
 #' @param field which field of the VCF file to use 
 #' @param adjust
-#' @param dominance
-#' @param constraint constraint regression parameters of v1 and v2 to be equal
+#' @param fraternity
 #'
 #' @details I left the 'constraint' option for the moment but this should disappear
 #' @return
@@ -12,13 +11,13 @@
 #'
 #' @examples
 
-lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, dominance = FALSE, adjust.par = c(20,20,10) ) {
+lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,10) ) {
 
   filename <- path.expand(filename)
   field <- match.arg(field)
 
   # matrix of unadjusted coefficients
-  K <- RawKinVcf(filename, field, dominance)
+  K <- RawKinVcf(filename, field, fraternity)
 
   # extracting indices of extreme off diagonal values from the matrix
   # this could be rewritten in C++ to speed up a little bit
@@ -38,7 +37,7 @@ lowKin.vcf <- function(filename, field = c("PL", "GP"), adjust = TRUE, dominance
   s <- unique(s)
 
   # computing regression adjusted matrix for all pairs of individuals in s
-  L <- PartialKinVcf(filename, s - 1L, field, TRUE, dominance, TRUE) 
+  L <- PartialKinVcf(filename, s - 1L, field, TRUE, fraternity, TRUE) 
 
   # estimating beta1 and beta2 multiplicative coeffs
   off.diag.raw <- K[s,s][upper.tri(L)]
