@@ -1,6 +1,10 @@
 # LowKi
 
-LowKi is a R package for computing Kinship and Fraternity matrices from shallow sequencing data. It uses vcf files with 'PL' or 'GP' fields. To install the package, use `devtools` :
+LowKi is a R package for computing Kinship and Fraternity matrices from shallow sequencing data. 
+It uses vcf files with 'PL' or 'GP' fields. 
+
+To install the package, first install `gaston`, `milorGWAS`, `Rcpp`, and `RcppEigen` from the CRAN,
+then use `devtools` :
 
 `devtools::install_github("genostats/LowKi")`
 

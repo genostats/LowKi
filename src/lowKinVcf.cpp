@@ -10,21 +10,6 @@
 #include "RawKinMatrix.h"
 #include <Rcpp.h>
 
-/*
-//[[Rcpp::export]]
-NumericVector bebopalula(std::string s) {
-  std::pair<double, double> R = PL2probs<double>((char *) s.c_str());
-  return NumericVector::create(1 - R.first - R.second, R.first, R.second);
-}
-
-//[[Rcpp::export]]
-NumericVector bebopalulu(std::string s) {
-  std::pair<double, double> R = GP2probs<double>((char *) s.c_str());
-  return NumericVector::create(1 - R.first - R.second, R.first, R.second);
-}
-
-*/
-
 template<typename T, typename scalar_t, class C>
 inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool domi) {
   GenoProbas<scalar_t> probs( VCF.samples.size() );

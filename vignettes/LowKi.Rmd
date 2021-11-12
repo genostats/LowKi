@@ -37,7 +37,7 @@ fratern.file <-system.file("extdata", "fraternity.rds", package="LowKi")
 The function `lowKi` will use the 'PL' field of the vcf file to compute the kinship matrix.
 
 ```{r}
-K.low <- lowKin.vcf(vcf.file)
+K.low <- lowKi(vcf.file)
 ```
 
 One can also use the hard called genotypes present in the cvf to estimate the kinship matrix (the functions bellow are from package gaston).
@@ -69,7 +69,7 @@ abline(0,1,col="red")
 To compute the fraternity matrix (or 'dominance matrix'), just add `fraternity = TRUE` in `lowKi`.
 
 ```{r fig.width=10, fig.height=5}
-D.low <- lowKin.vcf(vcf.file, fraternity = TRUE)
+D.low <- lowKi(vcf.file, fraternity = TRUE)
 D.gen <- DM(z)
 D.real <- readRDS(fratern.file)
 
