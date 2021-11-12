@@ -58,11 +58,9 @@ K.real <- readRDS(kinship.file)
 Let us compare these values.
 ```{r fig.width=10, fig.height=5}
 par(mfrow=c(1,2))
-plot(K.real, K.low, pch = ".", cex = 2, xlab = "true values", 
-     ylab = "LowKi estimates")
+plot(K.real, K.low, xlab = "true values", ylab = "LowKi estimates")
 abline(0,1,col="red")
-plot(K.real, K.gen, pch = ".", cex = 2, xlab = "true values",
-     ylab = "Estimates from hard called genotypes")
+plot(K.real, K.gen, xlab = "true values", ylab = "Estimates from hard called genotypes")
 abline(0,1,col="red")
 ```
 
@@ -76,11 +74,10 @@ D.gen <- DM(z)
 D.real <- readRDS(fratern.file)
 
 par(mfrow=c(1,2))
-plot(D.real, D.low, pch = ".", cex = 2, xlab = "true values", 
-     ylab = "LowKi estimates", xlim = c(0,0.5), ylim = c(-0.1,0.5))
+plot(D.real, D.low, xlab = "true values", ylab = "LowKi estimates",
+     xlim = c(0,0.5), ylim = c(-0.1,0.5))
 abline(0,1,col="red")
-plot(D.real, D.gen, pch = ".", cex = 2,  xlab = "true values",
-     ylab = "Estimates from hard called genotypes", 
+plot(D.real, D.gen, xlab = "true values", ylab = "Estimates from hard called genotypes", 
      xlim = c(0,0.5), ylim = c(-0.1,0.5)); 
 abline(0,1,col="red")
 ```
