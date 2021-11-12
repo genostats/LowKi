@@ -2,38 +2,38 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 lowKincpp <- function(P1, P2, adjust, domi, constr) {
-    .Call(`_LoKi_lowKincpp`, P1, P2, adjust, domi, constr)
+    .Call(`_LowKi_lowKincpp`, P1, P2, adjust, domi, constr)
 }
 
 aprx <- function(x, L, F_, ruleLeft, ruleRight, I, k) {
-    .Call(`_LoKi_aprx`, x, L, F_, ruleLeft, ruleRight, I, k)
+    .Call(`_LowKi_aprx`, x, L, F_, ruleLeft, ruleRight, I, k)
 }
 
 KinVcf <- function(filename, field, adjust, domi, constr) {
-    .Call(`_LoKi_KinVcf`, filename, field, adjust, domi, constr)
+    .Call(`_LowKi_KinVcf`, filename, field, adjust, domi, constr)
 }
 
 PartialKinVcf <- function(filename, Index, field, adjust, domi, constr) {
-    .Call(`_LoKi_PartialKinVcf`, filename, Index, field, adjust, domi, constr)
+    .Call(`_LowKi_PartialKinVcf`, filename, Index, field, adjust, domi, constr)
 }
 
 RawKinVcf <- function(filename, field, domi) {
-    .Call(`_LoKi_RawKinVcf`, filename, field, domi)
+    .Call(`_LowKi_RawKinVcf`, filename, field, domi)
 }
 
 mmult <- function(m1) {
-    .Call(`_LoKi_mmult`, m1)
+    .Call(`_LowKi_mmult`, m1)
 }
 
 readVcfProbas <- function(filename, field) {
-    .Call(`_LoKi_readVcfProbas`, filename, field)
+    .Call(`_LowKi_readVcfProbas`, filename, field)
 }
 
 essai_array <- function(A, I) {
-    .Call(`_LoKi_essai_array`, A, I)
+    .Call(`_LowKi_essai_array`, A, I)
 }
 
 test_vcf_reader <- function(filename) {
-    .Call(`_LoKi_test_vcf_reader`, filename)
+    .Call(`_LowKi_test_vcf_reader`, filename)
 }
 

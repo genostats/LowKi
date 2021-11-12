@@ -10,8 +10,10 @@ Description: Computes Kinship Matrices (GRM and Dominance Matrix) from Low Depth
 License: GPL-3
 LinkingTo: gaston, milorGWAS, Rcpp, RcppParallel, RcppEigen
 Depends: gaston, plyr, dplyr, Rcpp, RcppParallel, methods
+Suggests: knitr, rmarkdown
 Imports:
 NeedsCompilation: yes
 LazyLoad: yes
 LazyData: yes
+VignetteBuilder: knitr
 RoxygenNote: 7.1.1

@@ -1,3 +1,3 @@
-#' @useDynLib LoKi, .registration=TRUE
+#' @useDynLib LowKi, .registration=TRUE
 #' @importFrom Rcpp evalCpp
 NULL
