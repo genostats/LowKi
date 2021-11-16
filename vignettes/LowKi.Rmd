@@ -11,7 +11,6 @@ vignette: >
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library("knitr")
-library("LowKi")
 ```
 
 LowKi is a package for computing Kinship and Fraternity matrices from shallow sequencing data. It uses vcf files with 'PL' or 'GP' fields. 
@@ -28,7 +27,8 @@ The dataset consists in a 68 Mb vcf file containing shallow data for 200 individ
 
 The path to these three files on your filesystem can be obtained as follows:
 
-```{r}
+```{r message = FALSE}
+library(LowKi)
 vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
 kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
 fratern.file <-system.file("extdata", "fraternity.rds", package="LowKi")
