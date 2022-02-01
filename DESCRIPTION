@@ -9,7 +9,7 @@ Authors@R: c( person("Anthony", "Herzig", role = "aut"),
 Description: Computes Kinship Matrices (GRM and Dominance Matrix) from Low Depth Sequencing Data.
 License: GPL-3
 LinkingTo: gaston, milorGWAS, Rcpp, RcppEigen
-Depends: gaston, Rcpp, R (>= 3.5.0)
+Depends: gaston, Rcpp, R (>= 3.5.0), milorGWAS
 Suggests: knitr, rmarkdown
 Imports:
 NeedsCompilation: yes
