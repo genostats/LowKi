@@ -1,7 +1,7 @@
 Package: LowKi
 Type: Package
 Title: Low Depth Kinship
-Version: 1.0
+Version: 1.0.1
 Date: 2021-11-12
 Encoding: UTF-8 
 Authors@R: c( person("Anthony", "Herzig", role = "aut"),
@@ -16,4 +16,4 @@ NeedsCompilation: yes
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

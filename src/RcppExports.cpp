@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // KinVcf
 NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
 RcppExport SEXP _LowKi_KinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
@@ -50,11 +55,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vcfAlleleFreq
+List vcfAlleleFreq(std::string filename);
+RcppExport SEXP _LowKi_vcfAlleleFreq(SEXP filenameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcfAlleleFreq(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_LowKi_KinVcf", (DL_FUNC) &_LowKi_KinVcf, 5},
     {"_LowKi_PartialKinVcf", (DL_FUNC) &_LowKi_PartialKinVcf, 6},
     {"_LowKi_RawKinVcf", (DL_FUNC) &_LowKi_RawKinVcf, 3},
+    {"_LowKi_vcfAlleleFreq", (DL_FUNC) &_LowKi_vcfAlleleFreq, 1},
     {NULL, NULL, 0}
 };
 

@@ -18,7 +18,15 @@
 #' @return A symmetric matrix.
 #' @export
 #'
-#' @examples
+#' @examples # see vignette for more examples
+#' vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
+#' kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
+#' K.low <- lowKi(vcf.file)
+#' K.real <- readRDS(kinship.file)
+#' plot(K.real, K.low, xlab = "true values", ylab = "LowKi estimates")
+#' abline(0,1,col="red")
+
+
 
 lowKi <- function(filename, field = c("PL", "GP"), adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,10) ) {
 

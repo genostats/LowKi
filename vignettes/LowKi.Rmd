@@ -42,7 +42,7 @@ The function `lowKi` will use the 'PL' field of the vcf file to compute the kins
 K.low <- lowKi(vcf.file)
 ```
 
-One can also use the hard called genotypes present in the cvf to estimate the kinship matrix (the functions bellow are from package gaston).
+One can also use the hard called genotypes present in the vcf to estimate the kinship matrix (the functions bellow are from package gaston).
 
 ```{r}
 z <- read.vcf(vcf.file)

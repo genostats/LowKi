@@ -41,3 +41,12 @@ random individuals to be added.
 
 Note that all SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
 }
+\examples{
+# see vignette for more examples
+vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
+kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
+K.low <- lowKi(vcf.file)
+K.real <- readRDS(kinship.file)
+plot(K.real, K.low, xlab = "true values", ylab = "LowKi estimates")
+abline(0,1,col="red")
+}
