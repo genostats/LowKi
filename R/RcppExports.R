@@ -13,7 +13,11 @@ RawKinVcf <- function(filename, field, domi) {
     .Call(`_LowKi_RawKinVcf`, filename, field, domi)
 }
 
-vcfAlleleFreq <- function(filename) {
-    .Call(`_LowKi_vcfAlleleFreq`, filename)
+vcfAlleleFreqAD <- function(filename) {
+    .Call(`_LowKi_vcfAlleleFreqAD`, filename)
+}
+
+vcfAlleleFreqPr <- function(filename, field) {
+    .Call(`_LowKi_vcfAlleleFreqPr`, filename, field)
 }
 

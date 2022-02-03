@@ -55,14 +55,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vcfAlleleFreq
-List vcfAlleleFreq(std::string filename);
-RcppExport SEXP _LowKi_vcfAlleleFreq(SEXP filenameSEXP) {
+// vcfAlleleFreqAD
+List vcfAlleleFreqAD(std::string filename);
+RcppExport SEXP _LowKi_vcfAlleleFreqAD(SEXP filenameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    rcpp_result_gen = Rcpp::wrap(vcfAlleleFreq(filename));
+    rcpp_result_gen = Rcpp::wrap(vcfAlleleFreqAD(filename));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vcfAlleleFreqPr
+List vcfAlleleFreqPr(std::string filename, std::string field);
+RcppExport SEXP _LowKi_vcfAlleleFreqPr(SEXP filenameSEXP, SEXP fieldSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcfAlleleFreqPr(filename, field));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -71,7 +83,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_LowKi_KinVcf", (DL_FUNC) &_LowKi_KinVcf, 5},
     {"_LowKi_PartialKinVcf", (DL_FUNC) &_LowKi_PartialKinVcf, 6},
     {"_LowKi_RawKinVcf", (DL_FUNC) &_LowKi_RawKinVcf, 3},
-    {"_LowKi_vcfAlleleFreq", (DL_FUNC) &_LowKi_vcfAlleleFreq, 1},
+    {"_LowKi_vcfAlleleFreqAD", (DL_FUNC) &_LowKi_vcfAlleleFreqAD, 1},
+    {"_LowKi_vcfAlleleFreqPr", (DL_FUNC) &_LowKi_vcfAlleleFreqPr, 2},
     {NULL, NULL, 0}
 };
 

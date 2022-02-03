@@ -1,20 +1,31 @@
 #include <Rcpp.h>
+#include "PL2probs.h"
+#include "GP2probs.h"
+#include "GenoProbas.h"
+#include "mean_isfinite.h"
+#include "vcf_reader.h"
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "vcf_reader.h"
-#include "intPair.h"
-#include "af_likelihood.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List vcfAlleleFreq(std::string filename) {
-  vcf_reader<std::pair<int,int>> VCF( filename, "AD", intPair<int> );
+List vcfAlleleFreqPr(std::string filename, std::string field) {
+  std::pair<float,float> (* CONVERT) (char *);
+  if(field == "PL")
+    CONVERT = PL2probs<float>;
+  else if(field == "GP")
+    CONVERT = GP2probs<float>;
+  else
+    stop("Unable to use field "+field);
+
+  vcf_reader<std::pair<float,float>> VCF(filename, field, CONVERT);
+
   std::vector<std::string> SNP_ID, AL1, AL2;
   std::vector<int> CHR, POS;
   std::vector<double> P;
-  std::vector< std::pair<int,int> > data;
+  GenoProbas<float> data;
   int nb_ind(-1); 
   while( VCF.read_line(data) ) {
     // check for right line size
@@ -34,16 +45,10 @@ List vcfAlleleFreq(std::string filename) {
     AL2.push_back(VCF.A2);
 
     // estimate allele freq from data
-    af_likelihood<double,int> LIK(data);
-    // good starting point for Newton method
-    std::pair<int,int> R = accumulate(data.begin(), data.end(), std::pair<int, int>(0,0),
-              [](auto & a, auto & b){return std::pair<int, int>(a.first + b.first, a.second + b.second);});
-    double p = ((double) R.first + 0.001) / ((double) R.first + (double) R.second + 0.001);
+    float mu1 = mean_isfinite(data.P1);
+    float mu2 = mean_isfinite(data.P2);
+    P.push_back( 0.5*mu1 + mu2 );
 
-    bool b = LIK.newton_max(p, 0., 1., 1e-5, 10, false, true);
-    if(!b) p = LIK.Brent_fmax(0., 1., 1e-5); // if Newton failed...
-
-    P.push_back(1-p); // alternative allele freq !
     // clear data 
     data.clear();
   }

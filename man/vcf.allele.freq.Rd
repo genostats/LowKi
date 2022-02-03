@@ -4,7 +4,7 @@
 \alias{vcf.allele.freq}
 \title{Maximum likelihood estimates of allele frequencies}
 \usage{
-vcf.allele.freq(filename)
+vcf.allele.freq(filename, field = c("AD", "PL", "GP"))
 }
 \arguments{
 \item{filename}{path to a VCF file}
@@ -25,5 +25,5 @@ vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
 MLfreq <- vcf.allele.freq(vcf.file)
 # comparison of allele freqs from hardcalled genotypes
 z <- read.vcf(vcf.file)
-plot(A$p, z@p, pch = ".", cex = 2)
+plot(MLfreq$p, z@p, pch = ".", cex = 2)
 }

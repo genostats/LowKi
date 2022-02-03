@@ -11,9 +11,13 @@
 #' MLfreq <- vcf.allele.freq(vcf.file)
 #' # comparison of allele freqs from hardcalled genotypes
 #' z <- read.vcf(vcf.file)
-#' plot(A$p, z@p, pch = ".", cex = 2)
+#' plot(MLfreq$p, z@p, pch = ".", cex = 2)
 
 
-vcf.allele.freq <- function(filename) {
-  data.frame(vcfAlleleFreq(filename))
+vcf.allele.freq <- function(filename, field = c("AD", "PL", "GP")) {
+  field <- match.arg(field) 
+  if(field == "AD") 
+    data.frame(vcfAlleleFreqAD(filename))
+  else 
+    data.frame(vcfAlleleFreqPr(filename, field))
 }
