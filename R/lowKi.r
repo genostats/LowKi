@@ -4,7 +4,7 @@
 #' @param field which field of the VCF file to use 
 #' @param adjust logical. TRUE to use adjustment method
 #' @param fraternity logical. TRUE to compute the fraternity matrix instead of the kinship matrix
-#' @param adjust.par Parameters for the adjustment.
+#' @param adjust.par Parameters for the adjustment procedure (details below).
 #'
 #' @details This function computes the kinship matrix or the fraternity matrix (aka as 'dominance matrix')
 #' from shallow sequencing data. It relies on moment estimates and on an adjustment method which allows
@@ -12,8 +12,9 @@
 #' @details The method is exposed in details in a yet unpublished paper. The three values in `adjust.par`
 #' allow to control the number of individuals used in the adjustment. The first (resp. second) value gives the number 
 #' of pairs of individuals with the lowest (resp. highest) kinship to be selected; the third gives the number of
-#' random individuals to be added.
-#' @details Note that all SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
+#' random individuals to be added. The adjustment procedure is based on all the estimated coefficients between 
+#' the selected individuals.
+#' @details All SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
 #'
 #' @return A symmetric matrix.
 #' @export
@@ -52,7 +53,7 @@ lowKi <- function(filename, field = c("PL", "GP"), adjust = TRUE, fraternity = F
   
     # plus a few random indices
     s <- c(s, sample(1:n, n.random))
-    s <- unique(s)
+    s <- sort(unique(s))
   
     # computing regression adjusted matrix for all pairs of individuals in s
     L <- PartialKinVcf(filename, s - 1L, field, TRUE, fraternity, TRUE) 

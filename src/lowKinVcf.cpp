@@ -10,6 +10,7 @@
 #include "RawKinMatrix.h"
 #include <Rcpp.h>
 
+/*
 template<typename T, typename scalar_t, class C>
 inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool domi) {
   GenoProbas<scalar_t> probs( VCF.samples.size() );
@@ -21,6 +22,7 @@ inline void fillKinVcf(vcf_reader<T> & VCF, KinMatrix<scalar_t, C> & K, bool dom
     probs.clear(); // remise à zero des vecteurs P1/P2 dans probs
   }
 }
+*/
 
 template<typename T, typename scalar_t, class C>
 inline void fillKinVcf(vcf_reader<T> & VCF, PartialKinMatrix<scalar_t, C> & K, bool domi) {
@@ -34,6 +36,7 @@ inline void fillKinVcf(vcf_reader<T> & VCF, PartialKinMatrix<scalar_t, C> & K, b
   }
 }
 
+/*
 // [[Rcpp::export]]
 NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr) {
   std::pair<float,float> (* CONVERT) (char *);
@@ -62,6 +65,7 @@ NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool 
     return K.getRawMatrix();
   }
 } 
+*/
 
 // !!!!!!!!! Attention le vecteur Index est utilisé pour des C++ index (premier élément = indice 0)
 // [[Rcpp::export]]

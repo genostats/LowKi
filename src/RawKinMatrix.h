@@ -5,7 +5,8 @@
 #define _loki_rawkinmatrix_
 
 /* same as KinMatrix but does not make the regression
- * mostly for code simplicity elsewhere
+ * mostly for allowing code similarity between functions
+ * defined in lowKinVcf.cpp
  */
 
 template<typename scalar_t>
