@@ -22,21 +22,30 @@
 #' @examples # see vignette for more examples
 #' vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
 #' kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
-#' K.low <- lowKi(vcf.file)
+#' K.low.1 <- lowKi(vcf.file)
+#' MLfreq <- vcf.allele.freq(vcf.file)
+#' K.low.2 <- lowKi(vcf.file, freqs = MLfreq)
 #' K.real <- readRDS(kinship.file)
-#' plot(K.real, K.low, xlab = "true values", ylab = "LowKi estimates")
+#' par(mfrow=c(1,2))
+#' plot(K.real, K.low.1, xlab = "true values", ylab = "LowKi estimates")
+#' abline(0,1,col="red")
+#' plot(K.real, K.low.2, xlab = "true values", ylab = "LowKi estimates")
 #' abline(0,1,col="red")
 
 
 
-lowKi <- function(filename, field = c("PL", "GP"), adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,10) ) {
+lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,10) ) {
 
   filename <- path.expand(filename)
   field <- match.arg(field)
 
   # matrix of unadjusted coefficients
-  K <- RawKinVcf(filename, field, fraternity)
- 
+  if(missing(freqs)) {
+    K <- RawKinVcfLoki(filename, field, fraternity)
+  } else {
+    K <- RawKinVcfClassic(filename, field, freqs$p, fraternity)
+  }
+
   if(adjust) {
     # extracting indices of extreme off diagonal values from the matrix
     # this could be rewritten in C++ to speed up a little bit
@@ -56,20 +65,28 @@ lowKi <- function(filename, field = c("PL", "GP"), adjust = TRUE, fraternity = F
     s <- sort(unique(s))
   
     # computing regression adjusted matrix for all pairs of individuals in s
-    L <- PartialKinVcf(filename, s - 1L, field, TRUE, fraternity, TRUE) 
-  
+    if(missing(freqs)) {
+      L <- PartialKinVcfLoki(filename, s - 1L, field, TRUE, fraternity, TRUE) 
+    } else {
+      L <- PartialKinVcfClassic(filename, s - 1L, field, freqs$p, TRUE, fraternity, TRUE) 
+    }
     # estimating beta1 and beta2 multiplicative coeffs
     off.diag.raw <- K[s,s][upper.tri(L)]
     off.diag.adj <- L[ upper.tri(L) ]
     B1 <- lm(off.diag.adj ~ off.diag.raw)$coefficients[1:2]
-  
-    beta1 <- B1[2]
-    beta2 <- mean( 1/(diag(L) - B1[1]) )
-  
+
     # adjusting K
-    diag.K <- diag(K)
-    K <- K * beta1 * beta2
-    diag(K) <- diag.K * beta2
+    alpha <- B1[1] 
+    beta1 <- B1[2]
+    beta2 <- mean( 1/(diag(L) - alpha) )
+    if(fraternity) {
+      K <- beta1 * beta2 * K
+      diag(K) <- 1
+    } else { 
+      diag.K <- diag(K)
+      K <- alpha + beta1 * beta2 * K
+      diag(K) <- diag.K * beta2
+    }
   }
 
   K

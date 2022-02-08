@@ -7,6 +7,7 @@
 lowKi(
   filename,
   field = c("PL", "GP"),
+  freqs,
   adjust = TRUE,
   fraternity = FALSE,
   adjust.par = c(20, 20, 10)
@@ -21,7 +22,7 @@ lowKi(
 
 \item{fraternity}{logical. TRUE to compute the fraternity matrix instead of the kinship matrix}
 
-\item{adjust.par}{Parameters for the adjustment.}
+\item{adjust.par}{Parameters for the adjustment procedure (details below).}
 }
 \value{
 A symmetric matrix.
@@ -37,16 +38,22 @@ to correct the bias.
 The method is exposed in details in a yet unpublished paper. The three values in `adjust.par`
 allow to control the number of individuals used in the adjustment. The first (resp. second) value gives the number 
 of pairs of individuals with the lowest (resp. highest) kinship to be selected; the third gives the number of
-random individuals to be added.
+random individuals to be added. The adjustment procedure is based on all the estimated coefficients between 
+the selected individuals.
 
-Note that all SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
+All SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
 }
 \examples{
 # see vignette for more examples
 vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
 kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
-K.low <- lowKi(vcf.file)
+K.low.1 <- lowKi(vcf.file)
+MLfreq <- vcf.allele.freq(vcf.file)
+K.low.2 <- lowKi(vcf.file, freqs = MLfreq)
 K.real <- readRDS(kinship.file)
-plot(K.real, K.low, xlab = "true values", ylab = "LowKi estimates")
+par(mfrow=c(1,2))
+plot(K.real, K.low.1, xlab = "true values", ylab = "LowKi estimates")
+abline(0,1,col="red")
+plot(K.real, K.low.2, xlab = "true values", ylab = "LowKi estimates")
 abline(0,1,col="red")
 }
