@@ -11,21 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// KinVcf
-NumericMatrix KinVcf(std::string filename, std::string field, bool adjust, bool domi, bool constr);
-RcppExport SEXP _LowKi_KinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
-    Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
-    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
-    Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
-    rcpp_result_gen = Rcpp::wrap(KinVcf(filename, field, adjust, domi, constr));
-    return rcpp_result_gen;
-END_RCPP
-}
 // PartialKinVcf
 NumericMatrix PartialKinVcf(std::string filename, IntegerVector Index, std::string field, bool adjust, bool domi, bool constr);
 RcppExport SEXP _LowKi_PartialKinVcf(SEXP filenameSEXP, SEXP IndexSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
@@ -80,7 +65,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_LowKi_KinVcf", (DL_FUNC) &_LowKi_KinVcf, 5},
     {"_LowKi_PartialKinVcf", (DL_FUNC) &_LowKi_PartialKinVcf, 6},
     {"_LowKi_RawKinVcf", (DL_FUNC) &_LowKi_RawKinVcf, 3},
     {"_LowKi_vcfAlleleFreqAD", (DL_FUNC) &_LowKi_vcfAlleleFreqAD, 1},
