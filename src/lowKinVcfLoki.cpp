@@ -40,21 +40,27 @@ NumericMatrix PartialKinVcfLoki(std::string filename, IntegerVector Index, std::
       stop("Index too large");
   }
 
+  NumericMatrix R;
   if(adjust) {
     if(constr) {
       PartialKinMatrix<float, coeffRegressionBis> K(Index);
       fillKinVcfLoki(VCF, K, domi);
-      return K.getInterceptMatrix();
+      R = K.getInterceptMatrix();
     } else {
       PartialKinMatrix<float, coeffRegression> K(Index);
       fillKinVcfLoki(VCF, K, domi);
-      return K.getInterceptMatrix();
+      R = K.getInterceptMatrix();
     }
   } else {
     PartialKinMatrix<float, coeff> K(Index);
     fillKinVcfLoki(VCF, K, domi);
-    return K.getRawMatrix();
+    R = K.getRawMatrix();
   }
+
+  CharacterVector Names = wrap(VCF.samples);
+  rownames(R) = Names[Index];
+  colnames(R) = Names[Index];
+  return R;
 } 
 
 // [[Rcpp::export]]
@@ -81,6 +87,9 @@ NumericMatrix RawKinVcfLoki(std::string filename, std::string field, bool domi) 
     probs.clear(); // remise à zero des vecteurs P1/P2 dans probs
   }
 
-  return K.getRawMatrix();
+  NumericMatrix R = K.getRawMatrix();
+  rownames(R) = wrap(VCF.samples);
+  colnames(R) = wrap(VCF.samples);
+  return R;
 } 
 

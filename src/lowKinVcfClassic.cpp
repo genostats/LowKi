@@ -43,21 +43,27 @@ NumericMatrix PartialKinVcfClassic(std::string filename, IntegerVector Index, st
       stop("Index too large");
   }
 
+  NumericMatrix R;
   if(adjust) {
     if(constr) {
       PartialKinMatrix<float, coeffRegressionBis> K(Index);
       fillKinVcfClassic(VCF, K, q, domi);
-      return K.getInterceptMatrix();
+      R = K.getInterceptMatrix();
     } else {
       PartialKinMatrix<float, coeffRegression> K(Index);
       fillKinVcfClassic(VCF, K, q, domi);
-      return K.getInterceptMatrix();
+      R = K.getInterceptMatrix();
     }
   } else {
     PartialKinMatrix<float, coeff> K(Index);
     fillKinVcfClassic(VCF, K, q, domi);
-    return K.getRawMatrix();
+    R = K.getRawMatrix();
   }
+
+  CharacterVector Names = wrap(VCF.samples);
+  rownames(R) = Names[Index + 1];
+  colnames(R) = Names[Index + 1];
+  return R;
 } 
 
 
@@ -88,6 +94,9 @@ NumericMatrix RawKinVcfClassic(std::string filename, std::string field, NumericV
     probs.clear(); // remise à zero des vecteurs P1/P2 dans probs
   }
 
-  return K.getRawMatrix();
+  NumericMatrix R = K.getRawMatrix();
+  rownames(R) = wrap(VCF.samples);
+  colnames(R) = wrap(VCF.samples);
+  return R;
 } 
 
