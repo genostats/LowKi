@@ -61,8 +61,8 @@ NumericMatrix PartialKinVcfClassic(std::string filename, IntegerVector Index, st
   }
 
   CharacterVector Names = wrap(VCF.samples);
-  rownames(R) = Names[Index + 1];
-  colnames(R) = Names[Index + 1];
+  rownames(R) = Names[Index];
+  colnames(R) = Names[Index];
   return R;
 } 
 
