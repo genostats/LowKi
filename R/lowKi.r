@@ -79,15 +79,18 @@ lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fratern
     alpha <- B1[1] 
     beta1 <- B1[2]
     beta2 <- mean( 1/(diag(L) - alpha) )
+
+    diag.K <- diag(K)
+    K <- beta1 * beta2 * K
+
+    # shift with 25th percentile
+    diag(K) <- NA
+    K <- K - quantile(K, 0.25, na.rm=TRUE)
     if(fraternity) {
-      K <- beta1 * beta2 * K
       diag(K) <- 1
     } else { 
-      diag.K <- diag(K)
-      K <- alpha + beta1 * beta2 * K
       diag(K) <- diag.K * beta2
     }
   }
-
   K
 }
