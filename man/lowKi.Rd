@@ -18,6 +18,8 @@ lowKi(
 
 \item{field}{which field of the VCF file to use}
 
+\item{freqs}{[optional] allele frequencies (see details)}
+
 \item{adjust}{logical. TRUE to use adjustment method}
 
 \item{fraternity}{logical. TRUE to compute the fraternity matrix instead of the kinship matrix}

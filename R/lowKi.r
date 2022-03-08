@@ -2,6 +2,7 @@
 #'
 #' @param filename path to a VCF file
 #' @param field which field of the VCF file to use 
+#' @param freqs [optional] allele frequencies (see details)
 #' @param adjust logical. TRUE to use adjustment method
 #' @param fraternity logical. TRUE to compute the fraternity matrix instead of the kinship matrix
 #' @param adjust.par Parameters for the adjustment procedure (details below).
@@ -83,9 +84,11 @@ lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fratern
     diag.K <- diag(K)
     K <- beta1 * beta2 * K
 
-    # shift with 25th percentile
+    # final shift using 25th percentile
     diag(K) <- NA
     K <- K - quantile(K, 0.25, na.rm=TRUE)
+
+    # adjusting the diagonal
     if(fraternity) {
       diag(K) <- 1
     } else { 
