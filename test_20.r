@@ -5,15 +5,17 @@ kinship.file <-system.file("extdata", "kinship.rds", package="LowKi")
 kinship.file.20 <-system.file("extdata", "kinship_20.rds", package="LowKi")
 
 fraternity.file.20 <- system.file("extdata", "fraternity_20.rds", package="LowKi")
+af.file <- system.file("extdata", "alleleFreqs.tsv", package="LowKi")
 
-MLfreq <- vcf.allele.freq(vcf.file)
+# MLfreq <- vcf.allele.freq(vcf.file)
+AF <- read.table(af.file, header = TRUE)
 
 # K.low <- lowKi(vcf.file, freqs = MLfreq, adjust = FALSE)
 K.low.20 <- lowKi(vcf.file.20)
-K.low.20.af <- lowKi(vcf.file.20, freqs = MLfreq)
+K.low.20.af <- lowKi(vcf.file.20, freqs = AF)
 
 D.low.20 <- lowKi(vcf.file.20, fraternity = TRUE)
-D.low.20.af <- lowKi(vcf.file.20, freqs = MLfreq, fraternity = TRUE)
+D.low.20.af <- lowKi(vcf.file.20, freqs = AF, fraternity = TRUE)
 
 
 # K.real <- readRDS(kinship.file)
