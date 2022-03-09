@@ -8,6 +8,8 @@ vcf.allele.freq(filename, field = c("AD", "PL", "GP"))
 }
 \arguments{
 \item{filename}{path to a VCF file}
+
+\item{field}{VCF field to use}
 }
 \value{
 a data frame with columns `snp.id`, `chr`, `pos`, `A1`, `A2`, `p`. The last column
@@ -17,10 +19,11 @@ is the frequency of the alternate allele `A2`.
 Maximum likelihood estimates of allele frequencies
 }
 \details{
-Estimates allele frequencies by maximizing a likelihood on data from 'AD' field.
+Estimates allele frequencies by maximizing a likelihood on data from 'AD' field
+if `field = "AD"` (the default) or with moment estimates if `field = "PL"` or `"GP"`.
 }
 \examples{
-# computing allele freqs in example file
+# computing allele freqs from example file
 vcf.file <- system.file("extdata", "shallow.vcf.gz", package="LowKi")
 MLfreq <- vcf.allele.freq(vcf.file)
 # comparison of allele freqs from hardcalled genotypes

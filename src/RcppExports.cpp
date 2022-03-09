@@ -11,9 +11,40 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// PartialKinVcf
-NumericMatrix PartialKinVcf(std::string filename, IntegerVector Index, std::string field, bool adjust, bool domi, bool constr);
-RcppExport SEXP _LowKi_PartialKinVcf(SEXP filenameSEXP, SEXP IndexSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
+// PartialKinVcfClassic
+NumericMatrix PartialKinVcfClassic(std::string filename, IntegerVector Index, std::string field, NumericVector q, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LowKi_PartialKinVcfClassic(SEXP filenameSEXP, SEXP IndexSEXP, SEXP fieldSEXP, SEXP qSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type Index(IndexSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
+    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
+    Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
+    rcpp_result_gen = Rcpp::wrap(PartialKinVcfClassic(filename, Index, field, q, adjust, domi, constr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// RawKinVcfClassic
+NumericMatrix RawKinVcfClassic(std::string filename, std::string field, NumericVector q, bool domi);
+RcppExport SEXP _LowKi_RawKinVcfClassic(SEXP filenameSEXP, SEXP fieldSEXP, SEXP qSEXP, SEXP domiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
+    rcpp_result_gen = Rcpp::wrap(RawKinVcfClassic(filename, field, q, domi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// PartialKinVcfLoki
+NumericMatrix PartialKinVcfLoki(std::string filename, IntegerVector Index, std::string field, bool adjust, bool domi, bool constr);
+RcppExport SEXP _LowKi_PartialKinVcfLoki(SEXP filenameSEXP, SEXP IndexSEXP, SEXP fieldSEXP, SEXP adjustSEXP, SEXP domiSEXP, SEXP constrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,20 +54,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type adjust(adjustSEXP);
     Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
     Rcpp::traits::input_parameter< bool >::type constr(constrSEXP);
-    rcpp_result_gen = Rcpp::wrap(PartialKinVcf(filename, Index, field, adjust, domi, constr));
+    rcpp_result_gen = Rcpp::wrap(PartialKinVcfLoki(filename, Index, field, adjust, domi, constr));
     return rcpp_result_gen;
 END_RCPP
 }
-// RawKinVcf
-NumericMatrix RawKinVcf(std::string filename, std::string field, bool domi);
-RcppExport SEXP _LowKi_RawKinVcf(SEXP filenameSEXP, SEXP fieldSEXP, SEXP domiSEXP) {
+// RawKinVcfLoki
+NumericMatrix RawKinVcfLoki(std::string filename, std::string field, bool domi);
+RcppExport SEXP _LowKi_RawKinVcfLoki(SEXP filenameSEXP, SEXP fieldSEXP, SEXP domiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
     Rcpp::traits::input_parameter< std::string >::type field(fieldSEXP);
     Rcpp::traits::input_parameter< bool >::type domi(domiSEXP);
-    rcpp_result_gen = Rcpp::wrap(RawKinVcf(filename, field, domi));
+    rcpp_result_gen = Rcpp::wrap(RawKinVcfLoki(filename, field, domi));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -65,8 +96,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_LowKi_PartialKinVcf", (DL_FUNC) &_LowKi_PartialKinVcf, 6},
-    {"_LowKi_RawKinVcf", (DL_FUNC) &_LowKi_RawKinVcf, 3},
+    {"_LowKi_PartialKinVcfClassic", (DL_FUNC) &_LowKi_PartialKinVcfClassic, 7},
+    {"_LowKi_RawKinVcfClassic", (DL_FUNC) &_LowKi_RawKinVcfClassic, 4},
+    {"_LowKi_PartialKinVcfLoki", (DL_FUNC) &_LowKi_PartialKinVcfLoki, 6},
+    {"_LowKi_RawKinVcfLoki", (DL_FUNC) &_LowKi_RawKinVcfLoki, 3},
     {"_LowKi_vcfAlleleFreqAD", (DL_FUNC) &_LowKi_vcfAlleleFreqAD, 1},
     {"_LowKi_vcfAlleleFreqPr", (DL_FUNC) &_LowKi_vcfAlleleFreqPr, 2},
     {NULL, NULL, 0}
