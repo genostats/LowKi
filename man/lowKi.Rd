@@ -10,7 +10,7 @@ lowKi(
   freqs,
   adjust = TRUE,
   fraternity = FALSE,
-  adjust.par = c(20, 20, 10)
+  adjust.par = c(20, 20, 100)
 )
 }
 \arguments{

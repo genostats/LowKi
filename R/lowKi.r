@@ -39,7 +39,7 @@
 
 
 
-lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,10) ) {
+lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fraternity = FALSE, adjust.par = c(20,20,100) ) {
 
   filename <- path.expand(filename)
   field <- match.arg(field)
@@ -66,9 +66,13 @@ lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fratern
     s <- c(as.vector(head(o, n.lo)), as.vector(tail(o, n.hi)))
   
     # plus a few random indices
-    s <- c(s, sample(1:n, n.random))
-    s <- sort(unique(s))
-  
+    if(n.random < n) {
+      s <- c(s, sample(1:n, n.random))
+      s <- sort(unique(s))
+    } else {
+      s <- 1:n
+    }
+
     # computing regression adjusted matrix for all pairs of individuals in s
     if(missing(freqs)) {
       L <- PartialKinVcfLoki(filename, s - 1L, field, TRUE, fraternity, TRUE) 

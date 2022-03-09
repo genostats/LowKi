@@ -18,6 +18,7 @@ To install the package, first install `gaston`, `milorGWAS`, `Rcpp`, and `RcppEi
 then use `devtools` :
 
 `install.packages(c("Rcpp", "RcppEigen", "gaston", "milorGWAS"))`
+
 `devtools::install_github("genostats/LowKi")`
 
 A prepublication describing the method 
