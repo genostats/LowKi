@@ -37,11 +37,15 @@ This function computes the kinship matrix or the fraternity matrix (aka as 'domi
 from shallow sequencing data. It relies on moment estimates and on an adjustment method which allows
 to correct the bias.
 
-The method is exposed in details in a yet unpublished paper. The three values in `adjust.par`
+The method is exposed in details in \url{https://doi.org/10.21203/rs.3.rs-1109592/v1}. 
+The three values in `adjust.par`
 allow to control the number of individuals used in the adjustment. The first (resp. second) value gives the number 
 of pairs of individuals with the lowest (resp. highest) kinship to be selected; the third gives the number of
 random individuals to be added. The adjustment procedure is based on all the estimated coefficients between 
 the selected individuals.
+
+The argument `freqs` is optionnal. If provided, it should be a data frame which a column `p` giving
+the alternate allele frequency of each SNP in the vcf file.
 
 All SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
 }

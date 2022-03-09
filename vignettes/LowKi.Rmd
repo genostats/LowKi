@@ -47,7 +47,7 @@ K.low <- lowKi(vcf.file)
 
 One can also use the hard called genotypes present in the vcf to estimate the kinship matrix (the functions bellow are from package gaston).
 
-```{r}
+```{r results = FALSE}
 z <- read.vcf(vcf.file)
 K.gen <- GRM(z)
 ```
@@ -70,6 +70,7 @@ abline(0,1,col="red")
 ### Computing the fraternity matrix
 
 To compute the fraternity matrix (or 'dominance matrix'), just add `fraternity = TRUE` in `lowKi`.
+We compare it again to the 'true' values and to the hard called genotypes estimates.
 
 ```{r fig.width=10, fig.height=5}
 D.low <- lowKi(vcf.file, fraternity = TRUE)
@@ -84,6 +85,11 @@ plot(D.real, D.gen, xlab = "true values", ylab = "Estimates from hard called gen
      xlim = c(0,0.5), ylim = c(-0.1,0.5)); 
 abline(0,1,col="red")
 ```
+
+# Some available options 
+
+We illustrated the default behavior of the `lowKi` function. We will see below how
+to use it further.
 
 ### Using 'external' allelic frequencies
 
@@ -106,13 +112,17 @@ plot(D.real, D.low, xlab = "true values", ylab = "LowKi estimates", main = "frat
 abline(0,1,col="red")
 ```
 
-# About the number of individuals used for the adjustment procedure
+### The number of individuals used for the adjustment procedure
 
-The default is to use a small number of individuals for the adjustment.
-When the sample...
+`LowKi` first computes 'raw' biased estimates, then an adjustment procedure is used to reduce the bias.
+The default is to use a small number of individuals for the adjustment. The `adjust.par`
+parameter gives three numbers, corresponding to the number of pairs of individuals with the lowest kinship to be used,
+the number of pairs with the highest coefficient, and the number of random individuals to add to these.
 
+When the size `n` of the sample is small enough, using `adjust.par=c(0,0,n)` will force the function to
+use all individuals. We demonstrate this possibility below for our sample of size 200.
 
-```{r}
+```{r fig.width=10, fig.height=5}
 K.low <- lowKi(vcf.file, adjust.par=c(0,0,200))
 D.low <- lowKi(vcf.file, adjust.par=c(0,0,200), fraternity = TRUE)
 par(mfrow=c(1,2))
@@ -123,4 +133,49 @@ plot(D.real, D.low, xlab = "true values", ylab = "LowKi estimates", main = "frat
 abline(0,1,col="red")
 ```
 
+# A second example with a reduced number of individuals
+
+Other files are included in the package, corresponding to a subsample of 20 individuals
+taken from the 200 individuals sample described above. Additionnally, an allele frequency 
+table, obtained from 100 genotypes individuals from the same population is included as well.
+The path to these files is obtained as follows.
+
+```{r}
+vcf.file.20 <- system.file("extdata", "shallow_20.vcf.gz", package="LowKi")
+kinship.file.20 <-system.file("extdata", "kinship_20.rds", package="LowKi")
+fraternity.file.20 <- system.file("extdata", "fraternity_20.rds", package="LowKi")
+af.file <- system.file("extdata", "alleleFreqs.tsv", package="LowKi")
+```
+
+### Without external allele frequencies
+
+```{r fig.width=10, fig.height=5}
+K.low.20 <- lowKi(vcf.file.20)
+D.low.20 <- lowKi(vcf.file.20, fraternity = TRUE)
+
+K.real.20 <- readRDS(kinship.file.20)
+D.real.20 <- readRDS(fraternity.file.20)
+
+par(mfrow=c(1,2))
+plot(K.real.20, K.low.20, xlab = "true values", ylab = "LowKi estimates", main = "kinship matrix"); 
+abline(0,1,col="red")
+plot(D.real.20, D.low.20, xlab = "true values", ylab = "LowKi estimates", main = "fraternity matrix",
+     xlim = c(0,0.5), ylim = c(-0.1,0.5))
+abline(0,1,col="red")
+```
+
+### Using external allele frequencies
+
+```{r fig.width=10, fig.height=5}
+AF <- read.table(af.file, header = TRUE)
+K.low.20.af <- lowKi(vcf.file.20, freqs = AF)
+D.low.20.af <- lowKi(vcf.file.20, freqs = AF, fraternity = TRUE)
+
+par(mfrow=c(1,2))
+plot(K.real.20, K.low.20.af, xlab = "true values", ylab = "LowKi estimates", main = "kinship matrix"); 
+abline(0,1,col="red")
+plot(D.real.20, D.low.20.af, xlab = "true values", ylab = "LowKi estimates", main = "fraternity matrix",
+     xlim = c(0,0.5), ylim = c(-0.1,0.5))
+abline(0,1,col="red")
+```
 
