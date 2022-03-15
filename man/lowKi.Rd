@@ -42,7 +42,9 @@ The three values in `adjust.par`
 allow to control the number of individuals used in the adjustment. The first (resp. second) value gives the number 
 of pairs of individuals with the lowest (resp. highest) kinship to be selected; the third gives the number of
 random individuals to be added. The adjustment procedure is based on all the estimated coefficients between 
-the selected individuals.
+the selected individuals. Note that the two first values should be at least 5; in case they are lower, 
+they are replaced by 5. Using `adjust.par = c(0,0,n)` with `n` being the size of the sample results in using
+all pairs of individuals in the adjustment procedure, which is computationnally more heavy.
 
 The argument `freqs` is optionnal. If provided, it should be a data frame which a column `p` giving
 the alternate allele frequency of each SNP in the vcf file.

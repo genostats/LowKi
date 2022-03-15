@@ -15,7 +15,9 @@
 #' allow to control the number of individuals used in the adjustment. The first (resp. second) value gives the number 
 #' of pairs of individuals with the lowest (resp. highest) kinship to be selected; the third gives the number of
 #' random individuals to be added. The adjustment procedure is based on all the estimated coefficients between 
-#' the selected individuals.
+#' the selected individuals. Note that the two first values should be at least 5; in case they are lower, 
+#' they are replaced by 5. Using `adjust.par = c(0,0,n)` with `n` being the size of the sample results in using
+#' all pairs of individuals in the adjustment procedure, which is computationnally more heavy.
 #' @details The argument `freqs` is optionnal. If provided, it should be a data frame which a column `p` giving
 #' the alternate allele frequency of each SNP in the vcf file.
 #' @details All SNPs present in the VCF file will be used, regardless of the MAF or of the chromosome number.
@@ -60,8 +62,8 @@ lowKi <- function(filename, field = c("PL", "GP"), freqs, adjust = TRUE, fratern
     o <- cbind(o %% n, o %/% n) + 1
     o <- o[ o[,1] != o[,2] , ]
   
-    n.lo <- adjust.par[1]
-    n.hi <- adjust.par[2]
+    n.lo <- max(5, adjust.par[1])
+    n.hi <- max(5, adjust.par[2])
     n.random <- adjust.par[3]
     s <- c(as.vector(head(o, n.lo)), as.vector(tail(o, n.hi)))
   
